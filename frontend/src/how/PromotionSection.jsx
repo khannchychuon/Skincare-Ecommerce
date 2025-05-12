@@ -5,22 +5,14 @@ export default function PromotionSection() {
       <div className="bg-amber-50 rounded-lg overflow-hidden">
         <div className="grid grid-cols-2">
           <div className="p-6 flex flex-col justify-center">
-            <h3 className="text-2xl font-medium text-gray-900">
-              Get Your 50% Off
-            </h3>
-            <p className="mt-2 text-sm text-gray-600">
-              Nourish your skin with toxin-free cosmetic products.
-            </p>
+            <h3 className="text-2xl font-medium text-gray-900">Get Your 50% Off</h3>
+            <p className="mt-2 text-sm text-gray-600">Nourish your skin with toxin-free cosmetic products.</p>
             <button className="mt-4 bg-gray-900 text-white px-4 py-2 rounded-full text-sm hover:bg-gray-800 transition">
               Shop Now
             </button>
           </div>
           <div>
-            <img
-              src="/images/promo-model.png"
-              alt="Model with sunglasses"
-              className="h-full w-full object-cover"
-            />
+            <img src="/images/promo-model.png" alt="Model with sunglasses" className="h-full w-full object-cover" />
           </div>
         </div>
       </div>
@@ -35,11 +27,7 @@ export default function PromotionSection() {
         <p className="mt-1 text-gray-600">From</p>
         <p className="text-2xl font-semibold text-gray-900">$169</p>
         <div className="mt-4 flex justify-end">
-          <img
-            src="/images/skincare-products.png"
-            alt="Skincare products"
-            className="h-32 object-contain"
-          />
+          <img src="/images/skincare-products.png" alt="Skincare products" className="h-32 object-contain" />
         </div>
       </div>
 
@@ -55,14 +43,10 @@ export default function PromotionSection() {
             </button>
           </div>
           <div className="flex items-center">
-            <img
-              src="/images/body-lotion.png"
-              alt="Body lotion"
-              className="h-32 object-contain"
-            />
+            <img src="/images/body-lotion.png" alt="Body lotion" className="h-32 object-contain" />
           </div>
         </div>
       </div>
     </div>
-  );
+  )
 }

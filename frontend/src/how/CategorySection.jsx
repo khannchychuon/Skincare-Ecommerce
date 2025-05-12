@@ -10,7 +10,7 @@ export default function CategorySection() {
     { name: "Cheeks", icon: "/images/cheeks.png" },
     { name: "Eyes", icon: "/images/eyes.png" },
     { name: "Nails", icon: "/images/nails.png" },
-  ];
+  ]
 
   return (
     <section className="mt-8">
@@ -19,16 +19,12 @@ export default function CategorySection() {
         {categories.map((category, index) => (
           <a key={index} href="#" className="flex flex-col items-center">
             <div className="bg-white rounded-full p-4 w-20 h-20 flex items-center justify-center shadow-sm hover:shadow-md transition">
-              <img
-                src={category.icon || "/placeholder.svg"}
-                alt={category.name}
-                className="w-12 h-12 object-contain"
-              />
+              <img src={category.icon || "/placeholder.svg"} alt={category.name} className="w-12 h-12 object-contain" />
             </div>
             <span className="mt-2 text-sm text-center">{category.name}</span>
           </a>
         ))}
       </div>
     </section>
-  );
+  )
 }

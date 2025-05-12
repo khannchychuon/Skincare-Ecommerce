@@ -1,6 +1,6 @@
 export default function HeroBanner() {
   return (
-    <div className="relative bg-pink-100 rounded-lg overflow-hidden">
+    <div className="relative bg-pink-50 rounded-lg overflow-hidden">
       <div className="grid grid-cols-1 md:grid-cols-2">
         <div className="p-8 md:p-12 flex flex-col justify-center">
           <h1 className="text-4xl md:text-5xl font-serif text-gray-900 leading-tight">

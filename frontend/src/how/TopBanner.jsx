@@ -2,9 +2,9 @@ import { Facebook, Twitter, Instagram, Linkedin, Youtube } from "lucide-react";
 
 export default function TopBanner() {
   return (
-    <div className="bg-pink-500 text-white py-2 px-4">
-      <div className="container mx-auto flex justify-between items-center">
-        <div>
+    <div className="bg-pink-200 text-white  py-2 px-4">
+      <div className="container mx-auto flex justify-center items-center">
+        <div className="flex justify-between items-center">
           Enjoy Free Shipping For Orders Over $30!{" "}
           <a href="#" className="underline">
             Shop Now
