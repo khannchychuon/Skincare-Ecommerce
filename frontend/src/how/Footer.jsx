@@ -1,4 +1,4 @@
-import { Facebook, Twitter, Instagram, Linkedin, Youtube } from "lucide-react"
+import { Facebook, Twitter, Instagram, Linkedin, Youtube } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -6,7 +6,7 @@ export default function Footer() {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div>
-            <div className="flex items-center mb-4">
+            <div className="flex  items-center mb-4">
               <img src="/images/lipstick-icon.png" alt="" className="h-8 w-8" />
               <div className="ml-2">
                 <span className="font-serif text-lg">Cosmetic</span>
@@ -14,22 +14,43 @@ export default function Footer() {
               </div>
             </div>
             <p className="text-gray-600 mb-4">
-              Your one-stop destination for all beauty needs. Quality products at affordable prices.
+              Your one-stop destination for all beauty needs. Quality products
+              at affordable prices.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-400 hover:text-pink-500" aria-label="Facebook">
+              <a
+                href="#"
+                className="text-gray-400 hover:text-pink-500"
+                aria-label="Facebook"
+              >
                 <Facebook size={20} />
               </a>
-              <a href="#" className="text-gray-400 hover:text-pink-500" aria-label="Twitter">
+              <a
+                href="#"
+                className="text-gray-400 hover:text-pink-500"
+                aria-label="Twitter"
+              >
                 <Twitter size={20} />
               </a>
-              <a href="#" className="text-gray-400 hover:text-pink-500" aria-label="Instagram">
+              <a
+                href="#"
+                className="text-gray-400 hover:text-pink-500"
+                aria-label="Instagram"
+              >
                 <Instagram size={20} />
               </a>
-              <a href="#" className="text-gray-400 hover:text-pink-500" aria-label="LinkedIn">
+              <a
+                href="#"
+                className="text-gray-400 hover:text-pink-500"
+                aria-label="LinkedIn"
+              >
                 <Linkedin size={20} />
               </a>
-              <a href="#" className="text-gray-400 hover:text-pink-500" aria-label="YouTube">
+              <a
+                href="#"
+                className="text-gray-400 hover:text-pink-500"
+                aria-label="YouTube"
+              >
                 <Youtube size={20} />
               </a>
             </div>
@@ -109,7 +130,9 @@ export default function Footer() {
 
           <div>
             <h3 className="text-lg font-medium mb-4">Stay Updated</h3>
-            <p className="text-gray-600 mb-4">Subscribe to our newsletter for the latest products and offers.</p>
+            <p className="text-gray-600 mb-4">
+              Subscribe to our newsletter for the latest products and offers.
+            </p>
             <div className="flex">
               <input
                 type="email"
@@ -130,5 +153,5 @@ export default function Footer() {
         </div>
       </div>
     </footer>
-  )
+  );
 }

@@ -15,7 +15,7 @@ const Navbar = () => {
   );
 
   return (
-    <nav className="bg-white sticky top-0 z-50  ">
+    <nav className="bg-white sticky top-0 z-50">
       <div className="container mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
           {/* Mobile menu button */}
@@ -54,6 +54,8 @@ const Navbar = () => {
               </button>
             </div>
           </div>
+
+          {/* Desktop Links */}
           <div className="hidden md:flex justify-center space-x-7 py-2 bg-white">
             <Link
               to="/"
@@ -80,15 +82,48 @@ const Navbar = () => {
               Contact
             </Link>
           </div>
+
           {/* User + Cart Icons */}
           <div className="px-4">
             <div className="flex items-center space-x-5">
-              <button
-                className="text-gray-700 hover:text-pink-400"
-                aria-label="User Profile"
-              >
-                <User size={24} />
-              </button>
+              {/* User dropdown */}
+              <div className="relative group">
+                <button
+                  className="text-gray-700 hover:text-pink-400 transition-colors duration-300"
+                  aria-label="User Menu"
+                >
+                  <User size={24} />
+                </button>
+                <div
+                  className="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-md shadow-lg 
+                   opacity-0 invisible group-hover:opacity-100 group-hover:visible 
+                   transition-[opacity,visibility] duration-800 ease-in-out z-50"
+                >
+                  <Link
+                    to="/login"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-pink-100"
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    to="/register"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-pink-100"
+                  >
+                    Register
+                  </Link>
+                  <button
+                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-pink-100"
+                    onClick={() => {
+                      // TODO: Add logout logic here
+                      console.log("Logged out");
+                    }}
+                  >
+                    Logout
+                  </button>
+                </div>
+              </div>
+
+              {/* Cart icon */}
               <Link
                 to="/cart"
                 className="text-gray-700 hover:text-pink-400 relative"
@@ -105,7 +140,7 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Mobile Search Bar */}
+        {/* Mobile Search */}
         <div className="md:hidden mt-4">
           <div className="relative">
             <input
@@ -122,8 +157,6 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-
-      {/* Desktop Navigation Links */}
 
       {/* Mobile Navigation Dropdown */}
       {isMenuOpen && (
