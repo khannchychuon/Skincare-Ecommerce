@@ -1,153 +1,154 @@
-import { Facebook, Twitter, Instagram, Linkedin, Youtube } from "lucide-react";
+import { Link } from "react-router-dom"; // Add this import
+import {
+  Facebook,
+  Twitter,
+  Instagram,
+  Phone,
+  Mail,
+  Youtube,
+} from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="bg-white pt-12 pb-6 border-t border-gray-200">
+    <footer className="bg-[#2f4f4f] border-t border-gray-200 pt-10 pb-6">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Logo and About Section */}
           <div>
-            <div className="flex  items-center mb-4">
-              <img src="/images/lipstick-icon.png" alt="" className="h-8 w-8" />
-              <div className="ml-2">
-                <span className="font-serif text-lg">Cosmetic</span>
-                <span className="font-serif text-lg text-pink-500">Store</span>
-              </div>
-            </div>
-            <p className="text-gray-600 mb-4">
-              Your one-stop destination for all beauty needs. Quality products
-              at affordable prices.
-            </p>
-            <div className="flex space-x-4">
-              <a
-                href="#"
-                className="text-gray-400 hover:text-pink-500"
-                aria-label="Facebook"
-              >
-                <Facebook size={20} />
-              </a>
-              <a
-                href="#"
-                className="text-gray-400 hover:text-pink-500"
-                aria-label="Twitter"
-              >
-                <Twitter size={20} />
-              </a>
-              <a
-                href="#"
-                className="text-gray-400 hover:text-pink-500"
-                aria-label="Instagram"
-              >
-                <Instagram size={20} />
-              </a>
-              <a
-                href="#"
-                className="text-gray-400 hover:text-pink-500"
-                aria-label="LinkedIn"
-              >
-                <Linkedin size={20} />
-              </a>
-              <a
-                href="#"
-                className="text-gray-400 hover:text-pink-500"
-                aria-label="YouTube"
-              >
-                <Youtube size={20} />
-              </a>
-            </div>
-          </div>
-
-          <div>
-            <h3 className="text-lg font-medium mb-4">Quick Links</h3>
-            <ul className="space-y-2">
-              <li>
-                <a href="#" className="text-gray-600 hover:text-pink-500">
-                  About Us
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-600 hover:text-pink-500">
-                  Contact Us
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-600 hover:text-pink-500">
-                  Terms & Conditions
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-600 hover:text-pink-500">
-                  Privacy Policy
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-600 hover:text-pink-500">
-                  Return Policy
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-600 hover:text-pink-500">
-                  Shipping Info
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="text-lg font-medium mb-4">Categories</h3>
-            <ul className="space-y-2">
-              <li>
-                <a href="#" className="text-gray-600 hover:text-pink-500">
-                  Makeup
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-600 hover:text-pink-500">
-                  Skincare
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-600 hover:text-pink-500">
-                  Haircare
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-600 hover:text-pink-500">
-                  Fragrances
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-600 hover:text-pink-500">
-                  Tools & Brushes
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-600 hover:text-pink-500">
-                  Gift Sets
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="text-lg font-medium mb-4">Stay Updated</h3>
-            <p className="text-gray-600 mb-4">
-              Subscribe to our newsletter for the latest products and offers.
-            </p>
-            <div className="flex">
-              <input
-                type="email"
-                placeholder="Your email address"
-                className="flex-1 border border-gray-300 rounded-l-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-pink-500"
+            <div className="flex items-center mb-4">
+              <img
+                src="/images/lipstick-icon.png"
+                alt=""
+                className="h-10 w-10"
               />
-              <button className="bg-pink-500 text-white px-4 py-2 rounded-r-md hover:bg-pink-600 transition">
-                Subscribe
-              </button>
+              <span className="ml-3 font-serif text-xl text-white-800">
+                Cosmetic <span className="text-pink-500">Store</span>
+              </span>
             </div>
+            <p className="text-white mb-6">Welcome to our skincare website.</p>
+          </div>
+
+          {/* Quick Links Section */}
+          <div>
+            <h3 className="text-lg font-bold text-white mb-4">Quick Links</h3>
+            <ul className="space-y-3 text-white">
+              <li>
+                <Link to="/about" className="hover:text-teal-500">
+                  About Us
+                </Link>
+              </li>
+              <li>
+                <Link to="/privacy-policy" className="hover:text-teal-500">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link to="/faq" className="hover:text-teal-500">
+                  FAQ
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Categories Section */}
+          <div>
+            <h3 className="text-lg font-bold text-white mb-4">Contact us</h3>
+            <ul className="space-y-3 text-white">
+              <li>
+                <a
+                  href="tel:+855973967856"
+                  className="flex items-center space-x-2 text-white hover:text-teal-500"
+                  aria-label="Phone"
+                >
+                  <Phone size={24} />
+                  <span>+855 97 396 7856</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="tel:+855889916521"
+                  className="flex items-center space-x-2 text-white hover:text-teal-500"
+                  aria-label="Phone"
+                >
+                  <Phone size={24} />
+                  <span>+855 88 498 0839</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="mailto:pilo00054@gmail.com"
+                  className="flex items-center space-x-2 text-white hover:text-teal-500"
+                  aria-label="Email"
+                >
+                  <Mail size={24} />{" "}
+                  {/* Changed from Email to Mail for most icon libraries */}
+                  <span>pilo00054@gmail.com</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="mailto:chounkhannchy@gmail.com"
+                  className="flex items-center space-x-2 text-white hover:text-teal-500"
+                  aria-label="Email"
+                >
+                  <Mail size={24} />{" "}
+                  {/* Changed from Email to Mail for most icon libraries */}
+                  <span>chounkhannchy0@gmail.com</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Newsletter Subscription */}
+          <div>
+            <h3 className="text-lg font-bold text-white mb-4">Follow Us</h3>
+            <ul className="space-y-3 text-gray-600">
+              <li>
+                <a
+                  href="#"
+                  className="flex items-center space-x-2 text-white hover:text-teal-500"
+                  aria-label="Facebook"
+                >
+                  <Facebook size={24} />
+                  <span>Facebook</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="flex items-center space-x-2 text-white hover:text-teal-500"
+                  aria-label="Twitter"
+                >
+                  <Twitter size={24} />
+                  <span>Twitter</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="flex items-center space-x-2 text-white hover:text-teal-500"
+                  aria-label="Instagram"
+                >
+                  <Instagram size={24} />
+                  <span>Instagram</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="flex items-center space-x-2 text-white hover:text-teal-500"
+                  aria-label="YouTube"
+                >
+                  <Youtube size={24} />
+                  <span>YouTube</span>
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
 
-        <div className="border-t border-gray-200 mt-8 pt-6">
-          <p className="text-center text-gray-500 text-sm">
+        <div className="mt-10 text-center border-t border-gray-200 pt-6">
+          <p className="text-white text-sm">
             © {new Date().getFullYear()} Cosmetic Store. All rights reserved.
           </p>
         </div>

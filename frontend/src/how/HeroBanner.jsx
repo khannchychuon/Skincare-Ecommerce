@@ -1,63 +1,67 @@
 import { useState, useEffect } from "react";
-import pccImage1 from "./pcc.png";
-import pccImage2 from "./pcc.png";
-import pccImage3 from "./pcc.png";
+import pccImage1 from "./pic1.avif";
+import pccImage2 from "./pic2.jpg";
+import pccImage3 from "./pic3.webp";
+import pccImage4 from "./pic4.jpg";
+import pccImage5 from "./pic5.avif";
 
-const images = [pccImage1, pccImage2, pccImage3]; // Add more images as needed
+const images = [pccImage1, pccImage2, pccImage3, pccImage4, pccImage5];
 
 export default function HeroBanner() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
 
-  // Auto slide every 5 seconds
   useEffect(() => {
+    if (isHovered) return;
+
     const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }, 5000); // 5000ms = 5 seconds
+      setCurrentIndex((prev) => (prev + 1) % images.length);
+    }, 3000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [isHovered, images.length]);
 
   return (
-    <div className="relative bg-pink-50 rounded-lg overflow-hidden">
-      {/* Background Image with Slide Effect */}
-      <img
-        src={images[currentIndex]}
-        alt={`Beauty model ${currentIndex + 1}`}
-        className="w-full h-full object-cover absolute inset-0 transition-all duration-1000"
-      />
-
-      {/* Text and Button Overlay */}
-      <div className="relative z-10 text-center text-white p-6">
-        <h1 className="text-4xl md:text-5xl font-serif leading-tight">
-          Free
-          <br />
-          Shipping
-          <br />
-          Beauty
-        </h1>
-        <p className="mt-4 text-lg max-w-xl mx-auto">
-          Shop Top Quality Haircare, Makeup, Skincare,
-          <br />
-          Nailcare &amp; Much More.
-        </p>
-        <div className="mt-6">
-          <button className="bg-pink-500 text-white px-8 py-3 rounded-full hover:bg-pink-600 transition">
-            SHOP NOW
-          </button>
+    <div className="relative w-full px-4 pt-4">
+      {" "}
+      {/* Added top padding */}
+      <div
+        className="relative w-full h-[55vh] min-h-[400px] overflow-hidden rounded-xl md:rounded-2xl"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        {/* Slide container */}
+        <div className="relative w-full h-full">
+          {images.map((image, index) => (
+            <div
+              key={index}
+              className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ${
+                index === currentIndex ? "opacity-100" : "opacity-0"
+              }`}
+            >
+              <img
+                src={image}
+                alt=""
+                className="w-full h-full object-cover object-center"
+                loading={index === 0 ? "eager" : "lazy"}
+              />
+            </div>
+          ))}
         </div>
-      </div>
 
-      {/* Pagination Dots at the Bottom */}
-      <div className="absolute bottom-4 left-0 right-0 flex justify-center space-x-2">
-        {images.map((_, index) => (
-          <button
-            key={index}
-            className={`w-2 h-2 rounded-full transition-all ${
-              index === currentIndex ? "bg-pink-500" : "bg-pink-300"
-            }`}
-            onClick={() => setCurrentIndex(index)}
-          ></button>
-        ))}
+        {/* Navigation dots */}
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+          {images.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentIndex(index)}
+              className={`h-[3px] w-6 rounded-full transition-all duration-300 ${
+                index === currentIndex ? "bg-white w-8" : "bg-white/50"
+              }`}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

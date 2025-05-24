@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import ProductCard from "./ProductCard";
 
-const FeaturedProducts = () => {
+const BestSellers = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showAll, setShowAll] = useState(false);
@@ -14,39 +14,40 @@ const FeaturedProducts = () => {
         const mockData = [
           {
             id: 1,
-            name: "CeraVe Facial Cleanser",
-            category: "Cleanser",
-            price: 26.99,
-            image: "/images/products/hydrating-facial-cleanser.png",
+            name: "3CE Blush",
+            category: "Makeup",
+            price: 23.0,
+            image: "/images/products/3ec-blush.webp",
           },
           {
             id: 2,
-            name: "Balance Vitamin C Serum",
-            category: "Serum",
-            price: 11.99,
-            image: "/images/products/vitamin-c-brightening-serum.webp",
+            name: "Star Face",
+            category: "Makeup",
+            price: 10.99,
+            image: "/images/products/star-face.avif",
           },
           {
             id: 3,
-            name: "Nivea Night Cream",
-            category: "Moisturizer",
-            price: 11.19,
-            image: "/images/products/nourishing-night-cream.avif",
+            name: "Round Lab Face Mask",
+            category: "Mask",
+            price: 4.5,
+            image: "/images/products/round-lab-face-mask.jpg",
           },
           {
             id: 4,
-            name: "Skin1004 Sun Serum",
-            category: "Sunscreens",
-            price: 8.4,
-            image: "/images/products/skin1004-sunserum.webp",
+            name: "Romand Lasting Tint",
+            category: "Makeup",
+            price: 11.95,
+            image: "/images/products/romand-juicy-lasting-tint.webp",
           },
           {
             id: 5,
-            name: "Round Lab Cleanser",
-            category: "Cleanser",
-            price: 15.9,
-            image: "/images/products/round-lab-cleanser.webp",
+            name: "Romand Blur Fudge Tint",
+            category: "Makeup",
+            price: 12.69,
+            image: "/images/products/romand-blur-fudge-tint.webp",
           },
+
           // ... (rest of your mock data)
         ];
 
@@ -80,7 +81,7 @@ const FeaturedProducts = () => {
         <div className="flex items-center justify-center">
           <div className="flex-grow border-t border-teal-500"></div>
           <h2 className="px-4 text-3xl font-bold text-[#2f4f4f] whitespace-nowrap">
-            Trending Products
+            Best Sellers
           </h2>
           <div className="flex-grow border-t border-teal-500"></div>
         </div>
@@ -146,4 +147,4 @@ const FeaturedProducts = () => {
   );
 };
 
-export default FeaturedProducts;
+export default BestSellers;
