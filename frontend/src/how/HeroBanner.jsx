@@ -1,62 +1,50 @@
 import { useState, useEffect } from "react";
-import pccImage1 from "./pcc.png";
-import pccImage2 from "./pcc.png";
-import pccImage3 from "./pcc.png";
+import pccImage1 from "./p1.jpg";
+import pccImage2 from "./herobanner2.jpg";
+import pccImage3 from "./herobanner3.jpg";
 
-const images = [pccImage1, pccImage2, pccImage3]; // Add more images as needed
+const images = [pccImage1, pccImage2, pccImage3];
 
 export default function HeroBanner() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [fade, setFade] = useState(false);
 
-  // Auto slide every 5 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }, 5000); // 5000ms = 5 seconds
+      setFade(true);
+      setTimeout(() => {
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+        setFade(false);
+      }, 500); // timing for fade effect
+    }, 5000);
 
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <div className="relative bg-pink-50 rounded-lg overflow-hidden">
-      {/* Background Image with Slide Effect */}
+    <div className="relative w-full h-[300px] md:h-[500px] rounded-lg overflow-hidden">
+      {/* Fade effect container */}
       <img
         src={images[currentIndex]}
-        alt={`Beauty model ${currentIndex + 1}`}
-        className="w-full h-full object-cover absolute inset-0 transition-all duration-1000"
+        alt={`Slide ${currentIndex + 1}`}
+        className={`absolute inset-0 w-full h-full object-contain transition-opacity duration-500 ${
+          fade ? "opacity-0" : "opacity-100"
+        }`}
       />
 
-      {/* Text and Button Overlay */}
-      <div className="relative z-10 text-center text-white p-6">
-        <h1 className="text-4xl md:text-5xl font-serif leading-tight">
-          Free
-          <br />
-          Shipping
-          <br />
-          Beauty
-        </h1>
-        <p className="mt-4 text-lg max-w-xl mx-auto">
-          Shop Top Quality Haircare, Makeup, Skincare,
-          <br />
-          Nailcare &amp; Much More.
-        </p>
-        <div className="mt-6">
-          <button className="bg-pink-500 text-white px-8 py-3 rounded-full hover:bg-pink-600 transition">
-            SHOP NOW
-          </button>
-        </div>
-      </div>
-
-      {/* Pagination Dots at the Bottom */}
-      <div className="absolute bottom-4 left-0 right-0 flex justify-center space-x-2">
+      {/* Pagination Dots */}
+      <div className="absolute bottom-4 left-0 right-0 flex justify-center space-x-2 z-10">
         {images.map((_, index) => (
           <button
             key={index}
-            className={`w-2 h-2 rounded-full transition-all ${
+            onClick={() => {
+              setCurrentIndex(index);
+              setFade(false);
+            }}
+            className={`w-3 h-3 rounded-full transition-all ${
               index === currentIndex ? "bg-pink-500" : "bg-pink-300"
             }`}
-            onClick={() => setCurrentIndex(index)}
-          ></button>
+          />
         ))}
       </div>
     </div>

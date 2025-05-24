@@ -28,7 +28,7 @@ const ProductDetail = () => {
           image: "/placeholder.svg?height=600&width=600",
           description:
             "Our Vitamin C Brightening Serum is formulated with 15% pure vitamin C to brighten skin tone, reduce dark spots, and boost collagen production. This powerful antioxidant serum protects against environmental damage while improving skin texture and radiance.",
-          ingredients:
+          ingredients: 
             "Water, Ascorbic Acid (Vitamin C), Glycerin, Propanediol, Hyaluronic Acid, Ferulic Acid, Vitamin E, Aloe Barbadensis Leaf Juice, Citrus Aurantium Dulcis (Orange) Peel Oil, Citrus Limon (Lemon) Peel Oil, Xanthan Gum, Phenoxyethanol, Ethylhexylglycerin.",
           how_to_use:
             "Apply 3-4 drops to clean, dry skin in the morning before moisturizer and sunscreen. Gently pat into skin and allow to absorb completely before applying additional products.",
