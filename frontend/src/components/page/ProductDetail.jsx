@@ -16,30 +16,19 @@ const ProductDetail = () => {
   useEffect(() => {
     const getProduct = async () => {
       try {
-        // In a real implementation, this would fetch from your Laravel API
-        // const data = await fetchProductById(id);
-
-        // For now, we'll use mock data
-        const mockProduct = {
-          id: Number.parseInt(id),
-          name: "Vitamin C Brightening Serum",
-          category: "Serums",
-          price: 39.99,
-          image: "/images/products/vitamin-c-brightening-serum.webp",
-          description:
-            "Our Vitamin C Brightening Serum is formulated with 15% pure vitamin C to brighten skin tone, reduce dark spots, and boost collagen production. This powerful antioxidant serum protects against environmental damage while improving skin texture and radiance.",
-          ingredients: 
-            "Water, Ascorbic Acid (Vitamin C), Glycerin, Propanediol, Hyaluronic Acid, Ferulic Acid, Vitamin E, Aloe Barbadensis Leaf Juice, Citrus Aurantium Dulcis (Orange) Peel Oil, Citrus Limon (Lemon) Peel Oil, Xanthan Gum, Phenoxyethanol, Ethylhexylglycerin.",
-          how_to_use:
-            "Apply 3-4 drops to clean, dry skin in the morning before moisturizer and sunscreen. Gently pat into skin and allow to absorb completely before applying additional products.",
-          rating: 4.8,
-          review_count: 124,
-        };
-
-        setProduct(mockProduct);
-        setLoading(false);
+        const response = await fetch(
+          `http://127.0.0.1:8000/api/products/${id}`
+        );
+        if (!response.ok) {
+          throw new Error("Product not found");
+        }
+        const data = await response.json();
+        console.log("Fetched product price:", data.product.price); // debug
+        setProduct(data.product);
       } catch (error) {
         console.error("Error fetching product:", error);
+        setProduct(null);
+      } finally {
         setLoading(false);
       }
     };
@@ -151,7 +140,7 @@ const ProductDetail = () => {
           </div>
 
           <div className="text-2xl font-bold text-gray-900 mb-6">
-            ${product.price.toFixed(2)}
+            ${product.price ? Number(product.price).toFixed(2) : "0.00"}
           </div>
 
           <p className="text-gray-600 mb-6">{product.description}</p>

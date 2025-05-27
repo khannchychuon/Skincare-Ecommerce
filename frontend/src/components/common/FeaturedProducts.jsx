@@ -3,102 +3,83 @@
 import { useState, useEffect } from "react";
 import ProductCard from "./ProductCard";
 
-const FeaturedProducts = () => {
+const FeatureProducts = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
-    const getProducts = async () => {
+    const fetchFeatureProducts = async () => {
       try {
-        const mockData = [
+        const response = await fetch(
+          "http://127.0.0.1:8000/api/products?type=Trending",
           {
-            id: 1,
-            name: "CeraVe Facial Cleanser",
-            category: "Cleanser",
-            price: 26.99,
-            image: "/images/products/hydrating-facial-cleanser.png",
-          },
-          {
-            id: 2,
-            name: "Balance Vitamin C Serum",
-            category: "Serum",
-            price: 11.99,
-            image: "/images/products/vitamin-c-brightening-serum.webp",
-          },
-          {
-            id: 3,
-            name: "Nivea Night Cream",
-            category: "Moisturizer",
-            price: 11.19,
-            image: "/images/products/nourishing-night-cream.avif",
-          },
-          {
-            id: 4,
-            name: "Skin1004 Sun Serum",
-            category: "Sunscreens",
-            price: 8.4,
-            image: "/images/products/skin1004-sunserum.webp",
-          },
-          {
-            id: 5,
-            name: "Round Lab Cleanser",
-            category: "Cleanser",
-            price: 15.9,
-            image: "/images/products/round-lab-cleanser.webp",
-          },
-          // ... (rest of your mock data)
-        ];
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+          }
+        );
 
-        setProducts(mockData);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching products:", error);
+        if (!response.ok) {
+          throw new Error("Failed to fetch Trending products");
+        }
+
+        const data = await response.json();
+        const productsList = Array.isArray(data.products) ? data.products : [];
+
+        setProducts(productsList);
+      } catch (err) {
+        console.error("Error fetching Trending:", err);
+        setError("Could not load Trending. Please try again later.");
+      } finally {
         setLoading(false);
       }
     };
 
-    getProducts();
+    fetchFeatureProducts();
   }, []);
+
+  const displayedProducts = showAll ? products : products.slice(0, 4);
 
   if (loading) {
     return (
-      <div className="section-container">
-        <div className="text-center">
-          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-pink-400 border-r-transparent"></div>
-          <p className="mt-2 text-gray-600">Loading products...</p>
-        </div>
+      <div className="text-center py-6">
+        <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-pink-500 border-r-transparent" />
+        <p className="mt-2 text-gray-600">Loading Trending...</p>
       </div>
     );
   }
 
-  const displayedProducts = showAll ? products : products.slice(0, 4);
-
   return (
     <div className="section-container px-4 sm:px-6 lg:px-8 pb-6">
       <div className="text-center mb-8">
-        <div className="flex items-center justify-center">
-          <div className="flex-grow border-t border-teal-500"></div>
-          <h2 className="px-4 text-3xl font-bold text-[#2f4f4f] whitespace-nowrap">
-            Trending Products
-          </h2>
-          <div className="flex-grow border-t border-teal-500"></div>
-        </div>
+        <h2 className="text-3xl font-bold text-[#2f4f4f]">Trending</h2>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {displayedProducts.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
-      </div>
+      {error ? (
+        <div className="text-center text-red-500">{error}</div>
+      ) : products.length === 0 ? (
+        <p className="text-center text-gray-500">No Trending found.</p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {displayedProducts.map((product) => (
+            <ProductCard
+              key={product.id}
+              product={product}
+              showDiscount={false}
+            />
+          ))}
+        </div>
+      )}
 
       {products.length > 4 && (
         <div className="text-center mt-6 mb-4">
-          {" "}
-          {/* Added mb-16 */}
           <button
             onClick={() => setShowAll(!showAll)}
-            className="px-6 py-2 bg-[#2f4f4f] text-white rounded-lg hover:bg-[#3a5f5f] transition-colors"
+            className="relative px-6 py-2 bg-[#2f4f4f] text-white rounded-lg hover:bg-[#3a5f5f] transition-colors group"
           >
             <span className="relative z-10 font-medium tracking-wide flex items-center justify-center gap-2">
               {showAll ? (
@@ -135,10 +116,8 @@ const FeaturedProducts = () => {
                 </>
               )}
             </span>
-
-            {/* Hover effect elements */}
-            <span className="absolute inset-0 bg-[#3a5f5f] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-            <span className="absolute top-0 left-0 w-full h-0.5 bg-white/30 group-hover:h-full group-hover:opacity-0 transition-all duration-500"></span>
+            <span className="absolute inset-0 bg-[#3a5f5f] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <span className="absolute top-0 left-0 w-full h-0.5 bg-white/30 group-hover:h-full group-hover:opacity-0 transition-all duration-500" />
           </button>
         </div>
       )}
@@ -146,4 +125,4 @@ const FeaturedProducts = () => {
   );
 };
 
-export default FeaturedProducts;
+export default FeatureProducts;
