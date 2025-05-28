@@ -6,13 +6,18 @@ import { useCart } from "../context/CartContext";
 const Cart = () => {
   const { cartItems, updateCartItemQuantity, removeFromCart } = useCart();
 
+  const backendBaseUrl = "http://127.0.0.1:8000";
   const subtotal = cartItems.reduce((total, item) => {
     return total + item.price * item.quantity;
   }, 0);
 
   const shipping = subtotal > 0 ? 5.99 : 0;
   const total = subtotal + shipping;
-
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) return "/images/placeholder-product.png";
+    if (imagePath.startsWith("http")) return imagePath;
+    return `${backendBaseUrl}/${imagePath}`;
+  };
   if (cartItems.length === 0) {
     return (
       <div className="section-container">
@@ -46,7 +51,7 @@ const Cart = () => {
                     <li key={item.id} className="py-6 flex">
                       <div className="flex-shrink-0 w-24 h-24 rounded-md overflow-hidden">
                         <img
-                          src={item.image || "/placeholder.svg"}
+                          src={getImageUrl(item.image)}
                           alt={item.name}
                           className="w-full h-full object-cover"
                         />
