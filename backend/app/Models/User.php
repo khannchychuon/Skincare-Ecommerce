@@ -12,24 +12,21 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    // List all fields you expect to fill in mass assignment
     protected $fillable = [
-        'name',
-        'email',
+        'phone',
+        'first_name',
+        'last_name',
         'password',
-        'role',
-        'status',
     ];
 
+    // Hide sensitive fields in JSON responses
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
-
-    // Optional: Automatically hash password when set
+    // Automatically hash password when it's set
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = Hash::make($value);
