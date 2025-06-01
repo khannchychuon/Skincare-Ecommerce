@@ -5,7 +5,7 @@ import { useCart } from "../context/CartContext";
 
 const Checkout = () => {
   const { cartItems } = useCart();
-  const backendBaseUrl = "http://127.0.0.1:8000";
+  const backendBaseUrl = "http://127.0.0.1:8000"; // your Laravel API URL
 
   const [formData, setFormData] = useState({
     note: "",
@@ -18,6 +18,7 @@ const Checkout = () => {
   }, 0);
 
   const [orderSuccess, setOrderSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const shipping = subtotal > 0 ? 5.99 : 0;
   const total = subtotal + shipping;
@@ -36,12 +37,51 @@ const Checkout = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Order submitted:", { formData, items: cartItems, total });
 
-    // Simulate a successful order
-    setOrderSuccess(true);
+    const token = localStorage.getItem("authToken"); // Get token here, before using it
+
+    if (!token) {
+      alert("You must be logged in to place an order.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await fetch(`${backendBaseUrl}/api/orders`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // use token after it's declared
+        },
+        body: JSON.stringify({
+          note: formData.note,
+          address: formData.address,
+          payment_type: formData.paymentType,
+          items: cartItems.map((item) => ({
+            product_id: item.id,
+            quantity: item.quantity,
+            price: item.price,
+          })),
+          total: total,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to place order");
+      }
+
+      const data = await response.json();
+      console.log("Order successful:", data);
+      setOrderSuccess(true);
+    } catch (error) {
+      console.error("Order error:", error);
+      alert("Failed to place order. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (cartItems.length === 0) {
@@ -138,8 +178,12 @@ const Checkout = () => {
             </div>
 
             <div className="mt-8 md:hidden">
-              <button type="submit" className="w-full btn-primary">
-                Place Order
+              <button
+                type="submit"
+                className="w-full btn-primary"
+                disabled={loading}
+              >
+                {loading ? "Placing Order..." : "Place Order"}
               </button>
             </div>
           </form>
@@ -195,14 +239,15 @@ const Checkout = () => {
                 type="submit"
                 form="checkout-form"
                 className="w-full btn-primary"
+                disabled={loading}
               >
-                Place Order
+                {loading ? "Placing Order..." : "Place Order"}
               </button>
             </div>
           </div>
 
           {orderSuccess && (
-            <div className="fixed inset-0 bg-amber-300 bg-opacity-50- flex items-center justify-center z-50">
+            <div className="fixed inset-0 bg-amber-300 bg-opacity-50 flex items-center justify-center z-50">
               <div className="bg-white rounded-lg shadow-lg p-6 text-center w-full max-w-md">
                 <h2 className="text-2xl font-semibold text-green-600 mb-4">
                   Order Success!

@@ -3,6 +3,7 @@ import {
   Routes,
   Route,
   useLocation,
+  Navigate,
 } from "react-router-dom";
 import { CartProvider } from "./components/context/CartContext";
 import Navbar from "./components/common/Navbar";
@@ -18,6 +19,18 @@ import PrivacyPolicy from "./components/page/PrivacyPolicy";
 import Faq from "./components/page/Faq";
 import Login from "./Authentication/Login";
 import Register from "./Authentication/Register";
+import UserProfile from "./Authentication/User-profile";
+
+function RequireAuth({ children }) {
+  const token = localStorage.getItem("token");
+  const location = useLocation();
+
+  if (!token) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  return children;
+}
 
 function AppWrapper() {
   const location = useLocation();
@@ -42,13 +55,22 @@ function AppWrapper() {
           <Route path="/footer" element={<Footer />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route
+            path="/userprofile"
+            element={
+              <RequireAuth>
+                <UserProfile />
+              </RequireAuth>
+            }
+          />
         </Routes>
       </main>
-      {!hideNavbarAndFooter && <Footer />}
+      <Footer />
     </div>
   );
 }
 
+// Define App function (DO NOT FORGET THIS)
 function App() {
   return (
     <CartProvider>
@@ -59,4 +81,5 @@ function App() {
   );
 }
 
+// Export App
 export default App;

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FaTelegram, FaPhone, FaLock, FaArrowLeft } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const API_BASE = "http://127.0.0.1:8000/api";
 
@@ -13,6 +14,7 @@ export default function AuthForm() {
   const [verificationCode, setVerificationCode] = useState("");
   const [codeSent, setCodeSent] = useState(false);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const phoneWithCode = `+855${phone}`;
 
@@ -35,6 +37,7 @@ export default function AuthForm() {
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
+
     try {
       const res = await fetch(`${API_BASE}/login`, {
         method: "POST",
@@ -43,22 +46,30 @@ export default function AuthForm() {
       });
 
       const data = await parseJSONSafe(res);
+
       if (res.ok) {
-        alert("Login successful");
-        console.log(data);
+        localStorage.setItem("token", data.token);
+        navigate("/");
       } else {
         alert(data.message || "Login failed");
       }
     } catch (err) {
       alert("Login error occurred.");
     }
+
     setLoading(false);
   };
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    if (password !== confirmPassword) return alert("Passwords do not match");
+
+    if (password !== confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+
     setLoading(true);
+
     try {
       const res = await fetch(`${API_BASE}/register`, {
         method: "POST",
@@ -66,21 +77,31 @@ export default function AuthForm() {
         body: JSON.stringify({
           phone: phoneWithCode,
           password,
+          password_confirmation: confirmPassword,
           first_name: firstName,
           last_name: lastName,
         }),
       });
 
       const data = await parseJSONSafe(res);
+
       if (res.ok) {
-        alert("Registration successful!");
-        setMode("login");
+        if (data.token) {
+          localStorage.setItem("token", data.token); // Save token after register if available
+        }
+        navigate("/");
       } else {
-        alert(data.message || "Registration failed");
+        if (data.errors) {
+          const messages = Object.values(data.errors).flat().join("\n");
+          alert(messages);
+        } else {
+          alert(data.message || "Registration failed");
+        }
       }
     } catch (err) {
       alert("Error during registration.");
     }
+
     setLoading(false);
   };
 
@@ -326,7 +347,6 @@ export default function AuthForm() {
               </button>
             </p>
           )}
-
           <button
             className="mt-4 flex items-center justify-center w-full border border-gray-300 rounded-md py-2 hover:bg-gray-100"
             onClick={handleTelegramLogin}
