@@ -10,6 +10,7 @@ use App\Models\User;
 
 class AuthController extends Controller
 {
+    
     // ✅ Register a new user
     public function register(Request $request)
     {
@@ -36,27 +37,31 @@ class AuthController extends Controller
 
     // ✅ Login with phone and password
     public function login(Request $request)
-    {
-        $request->validate([
-            'phone' => 'required',
-            'password' => 'required',
-        ]);
+{
+    $request->validate([
+        'phone' => 'required',
+        'password' => 'required',
+    ]);
 
-        $user = User::where('phone', $request->phone)->first();
+    // Normalize phone: remove +855 or non-digits
+    $phone = preg_replace('/^\+855/', '', $request->phone);
+    $phone = preg_replace('/\D/', '', $phone);
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json(['message' => 'Invalid credentials'], 401);
-        }
+    $user = User::where('phone', $phone)->first();
 
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        return response()->json([
-            'message' => 'Login successful',
-            'access_token' => $token,
-            'token_type' => 'Bearer',
-            'user' => $user,
-        ]);
+    if (!$user || !Hash::check($request->password, $user->password)) {
+        return response()->json(['message' => 'Invalid credentials'], 401);
     }
+
+    $token = $user->createToken('auth_token')->plainTextToken;
+
+    return response()->json([
+        'message' => 'Login successful',
+        'access_token' => $token,
+        'token_type' => 'Bearer',
+        'user' => $user,
+    ]);
+}
 
     // ✅ Send a 6-digit verification code
     public function forgotPassword(Request $request)
@@ -94,10 +99,13 @@ class AuthController extends Controller
     }
 
     // ✅ Get authenticated user
-    public function user(Request $request)
-    {
-        return response()->json($request->user());
-    }
+   public function user(Request $request)
+{
+    return response()->json([
+        'user' => $request->user()
+    ]);
+}
+
 
     // ✅ Logout user and revoke tokens
     public function logout(Request $request)
@@ -106,4 +114,5 @@ class AuthController extends Controller
 
         return response()->json(['message' => 'Logged out successfully']);
     }
+    
 }

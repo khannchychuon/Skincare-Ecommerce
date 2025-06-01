@@ -12,7 +12,7 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    // List all fields you expect to fill in mass assignment
+  
     protected $fillable = [
         'phone',
         'first_name',
@@ -31,4 +31,9 @@ class User extends Authenticatable
     {
         $this->attributes['password'] = Hash::make($value);
     }
+    public function orders()
+{
+    return $this->hasMany(Order::class);
+}
+
 }
