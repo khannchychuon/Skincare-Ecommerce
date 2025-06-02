@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCart } from "../context/CartContext";
 
 const Checkout = () => {
   const { cartItems } = useCart();
-  const backendBaseUrl = "http://127.0.0.1:8000"; // your Laravel API URL
+  const backendBaseUrl = "http://127.0.0.1:8000";
 
   const [formData, setFormData] = useState({
     note: "",
@@ -13,12 +13,13 @@ const Checkout = () => {
     paymentType: "",
   });
 
+  const [orderSuccess, setOrderSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [token, setToken] = useState(null); // Store token from localStorage
+
   const subtotal = cartItems.reduce((total, item) => {
     return total + item.price * item.quantity;
   }, 0);
-
-  const [orderSuccess, setOrderSuccess] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   const shipping = subtotal > 0 ? 5.99 : 0;
   const total = subtotal + shipping;
@@ -29,18 +30,18 @@ const Checkout = () => {
     return `${backendBaseUrl}/${imagePath}`;
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
+  useEffect(() => {
+    const savedToken = localStorage.getItem("authToken")?.trim() || null;
+    console.log("Token from localStorage:", savedToken);
+    if (savedToken) {
+      setToken(savedToken);
+    } else {
+      setToken(null);
+    }
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const token = localStorage.getItem("authToken"); // Get token here, before using it
 
     if (!token) {
       alert("You must be logged in to place an order.");
@@ -54,23 +55,27 @@ const Checkout = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // use token after it's declared
+          Authorization: `Bearer ${token}`,
         },
+        credentials: "include",
         body: JSON.stringify({
           note: formData.note,
           address: formData.address,
           payment_type: formData.paymentType,
           items: cartItems.map((item) => ({
             product_id: item.id,
-            quantity: item.quantity,
+            name: item.name, // ✅ required
+            image: item.image ?? "", // optional
             price: item.price,
+            quantity: item.quantity,
           })),
           total: total,
         }),
       });
 
       if (!response.ok) {
-        throw new Error("Failed to place order");
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to place order");
       }
 
       const data = await response.json();
@@ -78,10 +83,18 @@ const Checkout = () => {
       setOrderSuccess(true);
     } catch (error) {
       console.error("Order error:", error);
-      alert("Failed to place order. Please try again.");
+      alert(`Failed to place order: ${error.message}`);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
   };
 
   if (cartItems.length === 0) {
@@ -104,6 +117,7 @@ const Checkout = () => {
       <h1 className="text-3xl font-bold text-gray-900 mb-8">Checkout</h1>
 
       <div className="grid md:grid-cols-3 gap-8">
+        {/* FORM */}
         <div className="md:col-span-2">
           <form onSubmit={handleSubmit} id="checkout-form">
             <div className="bg-white rounded-lg shadow-md overflow-hidden mb-8">
@@ -177,6 +191,7 @@ const Checkout = () => {
               </div>
             </div>
 
+            {/* MOBILE BUTTON */}
             <div className="mt-8 md:hidden">
               <button
                 type="submit"
@@ -189,6 +204,7 @@ const Checkout = () => {
           </form>
         </div>
 
+        {/* ORDER SUMMARY */}
         <div>
           <div className="bg-white rounded-lg shadow-md p-6 sticky top-20">
             <h2 className="text-lg font-medium text-gray-900 mb-4">
@@ -234,6 +250,8 @@ const Checkout = () => {
                 <p>${total.toFixed(2)}</p>
               </div>
             </div>
+
+            {/* DESKTOP BUTTON */}
             <div className="mt-6 hidden md:block">
               <button
                 type="submit"
@@ -246,6 +264,7 @@ const Checkout = () => {
             </div>
           </div>
 
+          {/* ORDER SUCCESS POPUP */}
           {orderSuccess && (
             <div className="fixed inset-0 bg-amber-300 bg-opacity-50 flex items-center justify-center z-50">
               <div className="bg-white rounded-lg shadow-lg p-6 text-center w-full max-w-md">

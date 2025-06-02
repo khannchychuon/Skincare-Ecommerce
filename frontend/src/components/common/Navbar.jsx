@@ -83,11 +83,11 @@ const Navbar = () => {
   const closeResults = () => setTimeout(() => setShowResults(false), 200);
 
   const handleAccountClick = () => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("authToken");
     if (token) {
-      navigate("/login");
+      navigate("/userprofile");
     } else {
-      navigate("/login"); // redirect to register page if not logged in
+      navigate("/login");
     }
   };
 

@@ -27,7 +27,7 @@ const UserProfile = () => {
   }, [userProfile]);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("authToken");
     if (!token) {
       console.warn("No authentication token found");
       return;
@@ -169,6 +169,12 @@ const UserProfile = () => {
       style: "currency",
       currency: "USD",
     }).format(price);
+  };
+
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) return "/images/placeholder-product.png";
+    if (imagePath.startsWith("http")) return imagePath;
+    return `http://127.0.0.1:8000/${imagePath}`;
   };
 
   if (loading) {
@@ -331,81 +337,58 @@ const UserProfile = () => {
         </div>
 
         {/* Order History Section */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-            <Package className="mr-3 h-6 w-6 text-purple-600" />
-            Order History
-          </h2>
+        <div className="min-h-screen bg-gray-50 py-10 px-4 md:px-8">
+          <div className="max-w-4xl mx-auto">
+            {/* Profile section */}
+            {/* ... Profile rendering logic here ... */}
 
-          {orderHistory.length === 0 ? (
-            <div className="text-center py-8">
-              <Package className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-              <p className="text-gray-500 text-lg">No orders found</p>
-              <p className="text-gray-400 text-sm mt-2">
-                Your order history will appear here once you make a purchase.
-              </p>
+            {/* Order History section */}
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                <Package className="mr-3 h-6 w-6 text-purple-600" /> Order
+                History
+              </h2>
+              {orderHistory.length === 0 ? (
+                <p className="text-gray-500">You have no orders yet.</p>
+              ) : (
+                <ul className="space-y-4">
+                  {orderHistory.map((order, idx) => (
+                    <li
+                      key={idx}
+                      className="p-4 border border-gray-200 rounded-md"
+                    >
+                      {/* Loop through order items */}
+                      <div className="mt-4 space-y-2">
+                        {order.items?.map((item, index) => (
+                          <div
+                            key={index}
+                            className="flex items-center gap-4 bg-gray-50 p-3 rounded"
+                          >
+                            <img
+                              src={getImageUrl(item.product.image)}
+                              alt={item.product.name}
+                              className="w-16 h-16 object-cover rounded"
+                            />
+                            <div>
+                              <p className="text-sm font-medium text-gray-800">
+                                {item.product.name}
+                              </p>
+                              <p className="text-sm text-gray-600">
+                                Qty: {item.quantity}
+                              </p>
+                              <p className="text-sm text-gray-600">
+                                Price: {formatPrice(item.price)}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
-          ) : (
-            <div className="space-y-4">
-              {orderHistory.map((item) => (
-                <div
-                  key={item.id}
-                  className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
-                >
-                  <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-                    <div className="flex items-start space-x-4 mb-4 md:mb-0">
-                      <img
-                        src={
-                          item.product_image ||
-                          "/placeholder.svg?height=64&width=64"
-                        }
-                        alt={item.product_name || "Product image"}
-                        className="w-16 h-16 object-cover rounded-md border border-gray-200"
-                        onError={(e) => {
-                          e.target.src = "/placeholder.svg?height=64&width=64";
-                        }}
-                      />
-                      <div className="flex-1">
-                        <h3 className="font-semibold text-gray-900 mb-1">
-                          {item.product_name || "Unknown Product"}
-                        </h3>
-                        <div className="flex flex-wrap gap-4 text-sm text-gray-600">
-                          <span className="flex items-center">
-                            <Package className="h-4 w-4 mr-1" />
-                            Order #{item.order_id || "N/A"}
-                          </span>
-                          <span className="flex items-center">
-                            <Calendar className="h-4 w-4 mr-1" />
-                            {formatDate(item.created_at)}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center justify-between md:flex-col md:items-end md:justify-center space-y-2">
-                      <div className="text-right">
-                        <p className="text-lg font-bold text-gray-900 flex items-center">
-                          <DollarSign className="h-4 w-4" />
-                          {formatPrice(item.price)}
-                        </p>
-                        <p className="text-sm text-gray-600">
-                          Qty: {item.quantity || 1}
-                        </p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-sm font-semibold text-purple-600">
-                          Total:{" "}
-                          {formatPrice(
-                            (item.price || 0) * (item.quantity || 1)
-                          )}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+          </div>
         </div>
       </div>
     </div>

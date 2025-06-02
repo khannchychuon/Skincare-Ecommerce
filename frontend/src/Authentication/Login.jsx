@@ -48,7 +48,7 @@ export default function AuthForm() {
       const data = await parseJSONSafe(res);
 
       if (res.ok) {
-        localStorage.setItem("token", data.token);
+        localStorage.setItem("authToken", data.token);
         navigate("/");
       } else {
         alert(data.message || "Login failed");
@@ -87,7 +87,7 @@ export default function AuthForm() {
 
       if (res.ok) {
         if (data.token) {
-          localStorage.setItem("token", data.token); // Save token after register if available
+          localStorage.setItem("authToken", data.token); // Save token after register if available
         }
         navigate("/");
       } else {
