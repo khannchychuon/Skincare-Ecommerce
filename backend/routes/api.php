@@ -3,14 +3,15 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\OrderController;
+use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\Api\ProductController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
 |--------------------------------------------------------------------------
 */
-use App\Http\Controllers\Api\ProductController;
 
 Route::get('/products', [ProductController::class, 'filterProducts']);
 Route::get('/products/{id}', [ProductController::class, 'show']);
@@ -24,19 +25,24 @@ Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
 Route::post('/verify-code', [AuthController::class, 'verifyCode']);
 Route::post('/telegram-login', [AuthController::class, 'telegramLogin']);
 Route::middleware('auth:sanctum')->group(function () {
+
+    // Get authenticated user info
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
- Route::put('/user/update', [UserController::class, 'update']); // ✅ Add this line for profile update
 
+    // Update user profile
+    Route::put('/user/update', [UserController::class, 'update']);
+
+    // Logout user
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    Route::post('/orders', [OrderController::class, 'store']);
-   Route::get('/orders', [OrderController::class, 'index']);
-
-    Route::get('/orders/{id}', [OrderController::class, 'show']);
-     Route::get('/user/orders', [OrderController::class, 'userOrders']);
+    // Orders routes
+            // Create order
+    Route::get('/orders', [OrderController::class, 'index']);           // List all orders
+    Route::get('/orders/{id}', [OrderController::class, 'show']);       // Show specific order
+    Route::get('/user/orders', [OrderController::class, 'userOrders']); // Orders of authenticated user
 });
-
+Route::middleware('auth:sanctum')->post('/orders', [OrderController::class, 'store']);
 
 

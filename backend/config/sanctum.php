@@ -9,11 +9,16 @@ return [
     |--------------------------------------------------------------------------
     */
 
-   'stateful' => explode(',', env('SANCTUM_STATEFUL_DOMAINS', sprintf(
-    '%s%s',
-    'http://localhost:5173/',
-    Sanctum::currentApplicationUrlWithPort()
-))),
+'stateful' => [
+    'localhost',
+    '127.0.0.1',
+    'localhost:5173',
+    '127.0.0.1:5173',
+],
+
+   'stateful' => explode(',', env('SANCTUM_STATEFUL_DOMAINS', 'http://localhost:5173')),
+
+
 
 
     /*

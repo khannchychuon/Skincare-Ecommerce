@@ -1,118 +1,41 @@
 <?php
-
 namespace App\Http\Controllers;
-
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Cache;
-use App\Models\User;
-
+use Illuminate\Validation\ValidationException;
 class AuthController extends Controller
 {
-    
-    // ✅ Register a new user
     public function register(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'phone' => 'required|unique:users,phone',
+        $request->validate([
+            'phone' => 'required|unique:users',
             'password' => 'required|min:6',
-            'first_name' => 'required',
-            'last_name' => 'required',
+            'first_name' => 'required|string',
+            'last_name' => 'required|string'
         ]);
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-
         $user = User::create([
             'phone' => $request->phone,
-            'password' => $request->password, // will be hashed via mutator
+            'password' => Hash::make($request->password),
             'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
+            'last_name' => $request->last_name
         ]);
-
-        return response()->json(['message' => 'User registered successfully', 'user' => $user], 201);
+        $token = $user->createToken('auth_token')->plainTextToken;
+        return response()->json(['token' => $token, 'user' => $user]);
     }
-
-    // ✅ Login with phone and password
     public function login(Request $request)
-{
-    $request->validate([
-        'phone' => 'required',
-        'password' => 'required',
-    ]);
-
-    // Normalize phone: remove +855 or non-digits
-    $phone = preg_replace('/^\+855/', '', $request->phone);
-    $phone = preg_replace('/\D/', '', $phone);
-
-    $user = User::where('phone', $phone)->first();
-
-    if (!$user || !Hash::check($request->password, $user->password)) {
-        return response()->json(['message' => 'Invalid credentials'], 401);
-    }
-
-    $token = $user->createToken('auth_token')->plainTextToken;
-
-    return response()->json([
-        'message' => 'Login successful',
-        'access_token' => $token,
-        'token_type' => 'Bearer',
-        'user' => $user,
-    ]);
-}
-
-    // ✅ Send a 6-digit verification code
-    public function forgotPassword(Request $request)
     {
-        $request->validate(['phone' => 'required']);
-
-        $code = rand(100000, 999999);
-        Cache::put('verify_' . $request->phone, $code, 300); // 5 minutes
-
-        // Simulate sending code via SMS
-        return response()->json(['message' => 'Verification code sent', 'code' => $code]);
-    }
-
-    // ✅ Verify code sent to user
-    public function verifyCode(Request $request)
-    {
-        $request->validate([
-            'phone' => 'required',
-            'code' => 'required|numeric',
-        ]);
-
-        $cachedCode = Cache::get('verify_' . $request->phone);
-
-        if ($cachedCode != $request->code) {
-            return response()->json(['message' => 'Invalid verification code'], 400);
+        $user = User::where('phone', $request->phone)->first();
+        if (! $user || ! Hash::check($request->password, $user->password)) {
+            throw ValidationException::withMessages([
+                'phone' => ['The provided credentials are incorrect.'],
+            ]);
         }
-
-        return response()->json(['message' => 'Code verified']);
+        $token = $user->createToken('auth_token')->plainTextToken;
+        return response()->json(['token' => $token, 'user' => $user]);
     }
-
-    // ✅ Placeholder for Telegram Login
-    public function telegramLogin(Request $request)
+    public function userProfile(Request $request)
     {
-        return response()->json(['message' => 'Login with Telegram not implemented yet.']);
+        return response()->json($request->user());
     }
-
-    // ✅ Get authenticated user
-   public function user(Request $request)
-{
-    return response()->json([
-        'user' => $request->user()
-    ]);
-}
-
-
-    // ✅ Logout user and revoke tokens
-    public function logout(Request $request)
-    {
-        $request->user()->currentAccessToken()->delete();
-
-        return response()->json(['message' => 'Logged out successfully']);
-    }
-    
 }
