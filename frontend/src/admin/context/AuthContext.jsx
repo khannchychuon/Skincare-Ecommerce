@@ -1,52 +1,94 @@
-"use client"
+"use client";
 
-import { useState, useEffect, createContext, useContext } from "react"
+import { useState, useEffect, createContext, useContext } from "react";
+import axios from "axios";
 
-const AuthContext = createContext()
+const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [user, setUser] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check if user is already logged in
-    const token = localStorage.getItem("adminToken")
+    const token = localStorage.getItem("adminToken");
     if (token) {
-      setIsAuthenticated(true)
-      setUser({ email: localStorage.getItem("adminEmail"), role: "admin" })
+      axios
+        .get("http://127.0.0.1:8000/api/admin/profile", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          setIsAuthenticated(true);
+          setUser(response.data);
+        })
+        .catch(() => {
+          logout();
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    } else {
+      setLoading(false);
     }
-    setLoading(false)
-  }, [])
+  }, []);
 
-  const login = (email, password) => {
-    // Mock authentication - in a real app, this would call an API
-    if (email === "admin@example.com" && password === "admin123") {
-      localStorage.setItem("adminToken", "mock-jwt-token")
-      localStorage.setItem("adminEmail", email)
-      setIsAuthenticated(true)
-      setUser({ email, role: "admin" })
-      return true
+  const login = async (phone, password) => {
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/admin/login",
+        {
+          phone,
+          password,
+        }
+      );
+
+      const { token, user } = response.data;
+      localStorage.setItem("adminToken", token);
+      setIsAuthenticated(true);
+      setUser(user);
+      return true;
+    } catch (error) {
+      console.error("Login failed:", error.response?.data || error.message);
+      return false;
     }
-    return false
-  }
+  };
 
-  const logout = () => {
-    localStorage.removeItem("adminToken")
-    localStorage.removeItem("adminEmail")
-    setIsAuthenticated(false)
-    setUser(null)
-  }
+  const logout = async () => {
+    const token = localStorage.getItem("adminToken");
+    try {
+      await axios.post(
+        "http://127.0.0.1:8000/api/admin/logout",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    } catch (error) {
+      console.warn("Logout error:", error.response?.data || error.message);
+    }
+
+    localStorage.removeItem("adminToken");
+    setIsAuthenticated(false);
+    setUser(null);
+  };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, login, logout, loading }}>{children}</AuthContext.Provider>
-  )
+    <AuthContext.Provider
+      value={{ isAuthenticated, user, login, logout, loading }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 export function useAuth() {
-  const context = useContext(AuthContext)
+  const context = useContext(AuthContext);
   if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider")
+    throw new Error("useAuth must be used within an AuthProvider");
   }
-  return context
+  return context;
 }

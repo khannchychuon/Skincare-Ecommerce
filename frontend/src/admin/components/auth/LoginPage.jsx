@@ -4,23 +4,27 @@ import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const { login } = useAuth();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
-    if (!email || !password) {
-      setError("Please enter both email and password");
+    if (!phone || !password) {
+      setError("Please enter both phone number and password");
       return;
     }
 
-    const success = login(email, password);
+    setLoading(true);
+    const success = await login(phone, password);
+    setLoading(false);
+
     if (!success) {
-      setError("Invalid email or password");
+      setError("Invalid phone number or password");
     }
   };
 
@@ -43,19 +47,19 @@ export default function LoginPage() {
 
           <div>
             <label
-              htmlFor="email"
+              htmlFor="phone"
               className="block text-sm font-medium text-gray-700"
             >
-              Email address
+              Phone Number
             </label>
             <input
-              id="email"
-              name="email"
-              type="email"
-              autoComplete="email"
+              id="phone"
+              name="phone"
+              type="tel"
+              autoComplete="tel"
               required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
               className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
@@ -82,14 +86,15 @@ export default function LoginPage() {
           <div>
             <button
               type="submit"
-              className="flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              disabled={loading}
+              className={`flex justify-center w-full px-4 py-2 text-sm font-medium text-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+                loading
+                  ? "bg-indigo-300 cursor-not-allowed"
+                  : "bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500"
+              }`}
             >
-              Sign in
+              {loading ? "Signing in..." : "Sign in"}
             </button>
-          </div>
-
-          <div className="text-sm text-center text-gray-500">
-            <p>Demo credentials: admin@example.com / admin123</p>
           </div>
         </form>
       </div>

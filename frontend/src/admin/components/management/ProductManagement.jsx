@@ -3,20 +3,46 @@
 import { useState, useEffect } from "react";
 import SearchBar from "../common/SearchBar";
 import Pagination from "../common/Pagination";
-import { mockProducts } from "../../data/mockData";
+import { useAuth } from "../../context/AuthContext";
 
 export default function ProductManagement({
   setSelectedItem,
   setShowModal,
   setModalType,
 }) {
+  const { user } = useAuth(); // Optional for role check
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [itemsPerPage] = useState(5);
 
   useEffect(() => {
-    setProducts(mockProducts);
+    const fetchProducts = async () => {
+      const token = localStorage.getItem("adminToken");
+
+      try {
+        const res = await fetch("http://127.0.0.1:8000/api/admin/products", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+          },
+        });
+
+        const data = await res.json();
+
+        if (Array.isArray(data.products)) {
+          setProducts(data.products);
+        } else {
+          console.error("Unexpected API format:", data);
+          setProducts([]);
+        }
+      } catch (err) {
+        console.error("Failed to fetch products:", err);
+        setProducts([]);
+      }
+    };
+
+    fetchProducts();
   }, []);
 
   const handleAddProduct = () => {
@@ -37,14 +63,12 @@ export default function ProductManagement({
     setShowModal(true);
   };
 
-  // Filter products by search term
   const filteredProducts = products.filter(
     (product) =>
-      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.category.toLowerCase().includes(searchTerm.toLowerCase())
+      product.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.category?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Pagination
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredProducts.slice(
@@ -65,7 +89,6 @@ export default function ProductManagement({
         </button>
       </div>
 
-      {/* Products Table */}
       <div className="p-6 bg-white rounded-lg shadow">
         <div className="mb-4">
           <SearchBar
@@ -92,7 +115,7 @@ export default function ProductManagement({
                 <tr key={product.id} className="hover:bg-gray-50">
                   <td className="px-4 py-3">
                     <img
-                      src={product.image || "/placeholder.svg"}
+                      src={`http://localhost:8000/${product.image}`}
                       alt={product.name}
                       className="w-10 h-10 object-cover rounded"
                     />
@@ -102,7 +125,7 @@ export default function ProductManagement({
                   </td>
                   <td className="px-4 py-3 text-sm">{product.category}</td>
                   <td className="px-4 py-3 text-sm">
-                    ${product.price.toFixed(2)}
+                    ${parseFloat(product.price).toFixed(2)}
                   </td>
                   <td className="px-4 py-3 text-sm">
                     <span
