@@ -19,6 +19,16 @@ class OrderController extends Controller
             'orders' => $orders
         ]);
     }
+public function adminIndex()
+{
+    $orders = Order::with(['items.product', 'user'])->latest()->get();
+
+    return response()->json([
+        'status' => 'success',
+        'orders' => $orders
+    ]);
+}
+
 
     public function index()
     {

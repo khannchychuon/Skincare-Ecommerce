@@ -42,9 +42,8 @@ return [
     ],
  
     'api' => [
-        'driver' => 'token',
+         'driver' => 'sanctum', // ✅ MUST be sanctum
         'provider' => 'users',
-        'hash' => false,
     ],
 ],
 

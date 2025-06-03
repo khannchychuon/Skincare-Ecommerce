@@ -18,6 +18,8 @@ class User extends Authenticatable
         'first_name',
         'last_name',
         'password',
+        'role',
+    'status',
     ];
 
     // Hide sensitive fields in JSON responses
@@ -25,6 +27,10 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+    public function isAdmin()
+{
+    return $this->role === 'admin';
+}
 
     // Automatically hash password when it's set
     public function setPasswordAttribute($value)

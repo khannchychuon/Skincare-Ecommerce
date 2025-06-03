@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
+    
     public function update(Request $request)
     {
         $user = $request->user();

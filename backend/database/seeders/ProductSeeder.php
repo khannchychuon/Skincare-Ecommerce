@@ -22,6 +22,7 @@ class ProductSeeder extends Seeder
         'rating' => 4.5,
         'review_count' => 120,
         'type' => 'Best Seller',
+        'stock'=> 30,
         'created_at' => now(),
         'updated_at' => now(),
     ],
