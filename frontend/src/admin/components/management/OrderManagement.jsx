@@ -38,7 +38,7 @@ export default function OrderManagement({
             order.user?.last_name || ""
           }`,
           date: new Date(order.created_at).toLocaleDateString(),
-          status: order.status || "Pending",
+          status: order.status || "Pending ",
           total: parseFloat(order.total || 0),
           raw: order,
         }));

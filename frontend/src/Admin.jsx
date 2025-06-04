@@ -14,7 +14,7 @@ import SettingsPage from "./admin/components/setting/SettingsPage";
 import Modal from "./admin/components/common/Modal";
 
 function AppContent() {
-  const [currentPage, setCurrentPage] = useState("dashboard");
+  const [currentPage, setCurrentPage] = useState("products");
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [selectedItem, setSelectedItem] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -72,14 +72,14 @@ function AppContent() {
                   setModalType={setModalType}
                 />
               )}
-              {currentPage === "reviews" && (
+              {/* {currentPage === "reviews" && (
                 <ReviewManagement
                   setSelectedItem={setSelectedItem}
                   setShowModal={setShowModal}
                   setModalType={setModalType}
                 />
               )}
-              {currentPage === "settings" && <SettingsPage />}
+              {currentPage === "settings" && <SettingsPage />} */}
             </main>
           </div>
 

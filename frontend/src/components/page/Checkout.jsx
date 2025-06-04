@@ -266,7 +266,7 @@ const Checkout = () => {
 
           {/* ORDER SUCCESS POPUP */}
           {orderSuccess && (
-            <div className="fixed inset-0 bg-amber-300 bg-opacity-50 flex items-center justify-center z-50">
+            <div className="fixed inset-0 bg-black/30 backdrop-blur-sm  flex items-center justify-center z-50">
               <div className="bg-white rounded-lg shadow-lg p-6 text-center w-full max-w-md">
                 <h2 className="text-2xl font-semibold text-green-600 mb-4">
                   Order Success!

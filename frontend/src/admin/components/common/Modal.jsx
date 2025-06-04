@@ -3,14 +3,50 @@
 import { useState } from "react";
 import { X } from "lucide-react";
 
-export default function Modal({ type, item, onClose }) {
+export default function Modal({ type, item, onClose, setRefreshTrigger }) {
   const [formData, setFormData] = useState(item || {});
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(`${type} action performed:`, formData);
-    alert(`${type} completed successfully!`);
-    onClose();
+    const token = localStorage.getItem("adminToken");
+
+    try {
+      let method = "POST";
+      let url = "http://127.0.0.1:8000/api/admin/products";
+
+      if (type === "editProduct" && item?.id) {
+        method = "PUT";
+        url = `http://127.0.0.1:8000/api/admin/products/${item.id}`;
+      }
+
+      if (type === "deleteProduct" && item?.id) {
+        method = "DELETE";
+        url = `http://127.0.0.1:8000/api/admin/products/${item.id}`;
+      }
+
+      const res = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: method !== "DELETE" ? JSON.stringify(formData) : null,
+      });
+
+      const result = await res.json();
+
+      if (res.ok) {
+        alert(result.message || "Action completed successfully");
+        if (setRefreshTrigger) setRefreshTrigger((prev) => prev + 1);
+        onClose();
+      } else {
+        console.error(result);
+        alert("Failed to complete the action");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("An error occurred");
+    }
   };
 
   const handleChange = (e) => {
@@ -20,17 +56,17 @@ export default function Modal({ type, item, onClose }) {
       [name]: inputType === "checkbox" ? checked : value,
     }));
   };
-
   const renderModalContent = () => {
     switch (type) {
       case "addProduct":
       case "editProduct":
         return (
-          <div className="space-y-4">
+          <div className="space-y-4 max-h-[80vh] overflow-y-auto p-2">
             <h2 className="text-lg font-semibold text-gray-900">
               {type === "addProduct" ? "Add New Product" : "Edit Product"}
             </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
+              {/* Name */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
                   Name
@@ -44,6 +80,63 @@ export default function Modal({ type, item, onClose }) {
                   className="mt-1 block w-full border rounded-md px-3 py-2"
                 />
               </div>
+
+              {/* Brand */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Brand
+                </label>
+                <input
+                  type="text"
+                  name="brand"
+                  value={formData.brand || ""}
+                  onChange={handleChange}
+                  required
+                  className="mt-1 block w-full border rounded-md px-3 py-2"
+                />
+              </div>
+
+              {/* Category */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Category
+                </label>
+                <select
+                  name="category"
+                  value={formData.category || ""}
+                  onChange={handleChange}
+                  required
+                  className="mt-1 block w-full border rounded-md px-3 py-2"
+                >
+                  <option value="Serum">Serum</option>
+                  <option value="Moisturizer">Moisturizer</option>
+                  <option value="Sunscreens">Sunscreens</option>
+                  <option value="Mask">Mask</option>
+                  <option value="Toner">Toner</option>
+                  <option value="Exfoliator">Exfoliator</option>
+                  <option value="Haircare">Haircare</option>
+                  <option value="Lotion">Lotion</option>
+                  <option value="Makeup">Makeup</option>
+                  <option value="Bodycare">Bodycare</option>
+                </select>
+              </div>
+
+              {/* Type */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Type
+                </label>
+                <input
+                  type="text"
+                  name="type"
+                  value={formData.type || ""}
+                  onChange={handleChange}
+                  required
+                  className="mt-1 block w-full border rounded-md px-3 py-2"
+                />
+              </div>
+
+              {/* Description */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
                   Description
@@ -56,6 +149,36 @@ export default function Modal({ type, item, onClose }) {
                   className="mt-1 block w-full border rounded-md px-3 py-2"
                 />
               </div>
+
+              {/* Ingredients */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Ingredients
+                </label>
+                <textarea
+                  name="ingredients"
+                  value={formData.ingredients || ""}
+                  onChange={handleChange}
+                  rows={2}
+                  className="mt-1 block w-full border rounded-md px-3 py-2"
+                />
+              </div>
+
+              {/* How to Use */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  How to Use
+                </label>
+                <textarea
+                  name="how_to_use"
+                  value={formData.how_to_use || ""}
+                  onChange={handleChange}
+                  rows={2}
+                  className="mt-1 block w-full border rounded-md px-3 py-2"
+                />
+              </div>
+
+              {/* Price & Stock */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
@@ -85,24 +208,54 @@ export default function Modal({ type, item, onClose }) {
                   />
                 </div>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Category
-                </label>
-                <select
-                  name="category"
-                  value={formData.category || ""}
-                  onChange={handleChange}
-                  required
-                  className="mt-1 block w-full border rounded-md px-3 py-2"
-                >
-                  <option value="">Select Category</option>
-                  <option value="Electronics">Electronics</option>
-                  <option value="Audio">Audio</option>
-                  <option value="Wearables">Wearables</option>
-                  <option value="Home Appliances">Home Appliances</option>
-                </select>
+
+              {/* Rating & Review Count */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Rating
+                  </label>
+                  <input
+                    type="number"
+                    name="rating"
+                    value={formData.rating || ""}
+                    onChange={handleChange}
+                    step="0.1"
+                    className="mt-1 block w-full border rounded-md px-3 py-2"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Review Count
+                  </label>
+                  <input
+                    type="number"
+                    name="review_count"
+                    value={formData.review_count || ""}
+                    onChange={handleChange}
+                    className="mt-1 block w-full border rounded-md px-3 py-2"
+                  />
+                </div>
               </div>
+
+              {/* Images */}
+              {["image", "image_2", "image_3", "image_4"].map((imgField, i) => (
+                <div key={i}>
+                  <label className="block text-sm font-medium text-gray-700">
+                    {imgField.replace("_", " ").toUpperCase()}
+                  </label>
+                  <input
+                    type="text"
+                    name={imgField}
+                    value={formData[imgField] || ""}
+                    onChange={handleChange}
+                    placeholder="Image URL"
+                    className="mt-1 block w-full border rounded-md px-3 py-2"
+                  />
+                </div>
+              ))}
+
+              {/* Buttons */}
               <div className="flex justify-end space-x-3 pt-4">
                 <button
                   type="button"
@@ -390,7 +543,7 @@ export default function Modal({ type, item, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm bg-opacity-25">
       <div className="bg-white rounded-lg p-6 w-full max-w-xl relative">
         <button
           onClick={onClose}

@@ -15,7 +15,34 @@ export default function ProductManagement({
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [itemsPerPage] = useState(5);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+  // 1. Move fetchProducts outside useEffect
+  const fetchProducts = async () => {
+    const token = localStorage.getItem("adminToken");
 
+    try {
+      const res = await fetch("http://127.0.0.1:8000/api/admin/products", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+      });
+
+      const data = await res.json();
+
+      if (Array.isArray(data.products)) {
+        setProducts(data.products);
+      } else {
+        console.error("Unexpected API format:", data);
+        setProducts([]);
+      }
+    } catch (err) {
+      console.error("Failed to fetch products:", err);
+      setProducts([]);
+    }
+  };
+
+  // 2. Call it once when component loads
   useEffect(() => {
     const fetchProducts = async () => {
       const token = localStorage.getItem("adminToken");
@@ -43,7 +70,7 @@ export default function ProductManagement({
     };
 
     fetchProducts();
-  }, []);
+  }, [refreshTrigger]); // << watch refreshTrigger
 
   const handleAddProduct = () => {
     setSelectedItem(null);

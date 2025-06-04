@@ -194,19 +194,16 @@ const UserProfile = () => {
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Profile Section */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+        <div className="bg-white p-6 mb-1">
           <div className="flex items-center justify-between mb-6">
             <h1 className="text-2xl font-bold text-gray-900 flex items-center">
-              <User className="mr-3 h-6 w-6 text-blue-600" />
               User Profile
             </h1>
             {!isEditing && (
               <button
                 onClick={() => setIsEditing(true)}
-                className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                Edit Profile
-              </button>
+                className=" text-white px-4 py-2 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+              ></button>
             )}
           </div>
 
@@ -337,13 +334,13 @@ const UserProfile = () => {
         </div>
 
         {/* Order History Section */}
-        <div className="min-h-screen bg-gray-50 py-10 px-4 md:px-8">
+        <div className="min-h-screen bg-gray-50 py-10 px-4 md:px-3">
           <div className="max-w-4xl mx-auto">
             {/* Profile section */}
             {/* ... Profile rendering logic here ... */}
 
             {/* Order History section */}
-            <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="bg-white rounded-lg shadow-md max-h-[80vh] overflow-y-auto p-3">
               <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
                 <Package className="mr-3 h-6 w-6 text-purple-600" /> Order
                 History

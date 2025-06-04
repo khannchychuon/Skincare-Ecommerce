@@ -22,12 +22,11 @@ export default function Sidebar({
   const { logout } = useAuth();
 
   const menuItems = [
-    { id: "dashboard", label: "Dashboard", icon: <Home size={20} /> },
     { id: "products", label: "Products", icon: <Package size={20} /> },
     { id: "orders", label: "Orders", icon: <ShoppingCart size={20} /> },
     { id: "users", label: "Users", icon: <Users size={20} /> },
-    { id: "reviews", label: "Reviews", icon: <Star size={20} /> },
-    { id: "settings", label: "Settings", icon: <Settings size={20} /> },
+    // { id: "reviews", label: "Reviews", icon: <Star size={20} /> },
+    // { id: "settings", label: "Settings", icon: <Settings size={20} /> },
   ];
 
   return (
