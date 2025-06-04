@@ -35,10 +35,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/user/update', [UserController::class, 'update']);
 
     // Logout user
-    Route::post('/logout', [AuthController::class, 'logout']);
+  Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
 
-   
-    Route::get('/orders', [OrderController::class, 'index']);           // List all orders
+
+   Route::get('/orders', [OrderController::class, 'index']);           // List all orders
     Route::get('/orders/{id}', [OrderController::class, 'show']);       // Show specific order
     Route::get('/user/orders', [OrderController::class, 'userOrders']); // Orders of authenticated user
 });
@@ -61,5 +61,8 @@ Route::prefix('admin')->group(function () {
   Route::get('/users', [UserManagementController::class, 'index']);
     // Admin order list
     Route::get('/orders', [OrderController::class, 'adminIndex']);
+    Route::put('/admin/orders/{id}/status', [AdminOrderController::class, 'updateStatus']);
+
+
     });
 });
