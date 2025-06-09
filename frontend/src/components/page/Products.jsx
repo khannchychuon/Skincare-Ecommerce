@@ -31,7 +31,6 @@ const Products = () => {
       try {
         let url = "http://127.0.0.1:8000/api/products";
         if (categoryFilter && categoryFilter !== "All") {
-          // Assume your backend supports filtering by category via query param
           url += `?category=${encodeURIComponent(categoryFilter)}`;
         }
 

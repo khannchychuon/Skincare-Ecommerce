@@ -15,7 +15,7 @@ const Checkout = () => {
 
   const [orderSuccess, setOrderSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [token, setToken] = useState(null); // Store token from localStorage
+  const [token, setToken] = useState(null);
 
   const subtotal = cartItems.reduce((total, item) => {
     return total + item.price * item.quantity;
@@ -64,8 +64,8 @@ const Checkout = () => {
           payment_type: formData.paymentType,
           items: cartItems.map((item) => ({
             product_id: item.id,
-            name: item.name, // ✅ required
-            image: item.image ?? "", // optional
+            name: item.name,
+            image: item.image ?? "",
             price: item.price,
             quantity: item.quantity,
           })),

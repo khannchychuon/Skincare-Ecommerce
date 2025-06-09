@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FaPhone, FaLock, FaUser } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const Register = ({ onSwitchToLogin }) => {
   const [phone, setPhone] = useState("");
@@ -7,14 +8,52 @@ const Register = ({ onSwitchToLogin }) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
+
     if (password !== confirmPassword) {
       alert("Passwords don't match!");
       return;
     }
-    console.log("Register:", { phone, password, firstName, lastName });
+
+    setLoading(true);
+
+    try {
+      const response = await fetch("http://localhost:8000/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          phone: `+855${phone}`,
+          password,
+          password_confirmation: confirmPassword,
+          first_name: firstName,
+          last_name: lastName,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem("authToken", data.token);
+        navigate("/");
+      } else {
+        const messages = data.errors
+          ? Object.values(data.errors).flat().join("\n")
+          : data.message || "Registration failed.";
+        alert(messages);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -46,6 +85,7 @@ const Register = ({ onSwitchToLogin }) => {
               />
             </div>
           </div>
+
           <div>
             <label className="block text-sm font-medium text-[#2f4f4f] mb-1">
               Password
@@ -64,6 +104,7 @@ const Register = ({ onSwitchToLogin }) => {
               />
             </div>
           </div>
+
           <div>
             <label className="block text-sm font-medium text-[#2f4f4f] mb-1">
               Confirm Password
@@ -82,6 +123,7 @@ const Register = ({ onSwitchToLogin }) => {
               />
             </div>
           </div>
+
           <div>
             <label className="block text-sm font-medium text-[#2f4f4f] mb-1">
               First Name
@@ -100,6 +142,7 @@ const Register = ({ onSwitchToLogin }) => {
               />
             </div>
           </div>
+
           <div>
             <label className="block text-sm font-medium text-[#2f4f4f] mb-1">
               Last Name
@@ -118,12 +161,14 @@ const Register = ({ onSwitchToLogin }) => {
               />
             </div>
           </div>
+
           <div className="grid grid-cols-2 gap-3">
             <button
               type="submit"
+              disabled={loading}
               className="w-full bg-[#2f4f4f] hover:bg-[#3b5f5f] text-white py-2 px-4 rounded-md transition duration-200 font-bold"
             >
-              Sign Up
+              {loading ? "Signing Up..." : "Sign Up"}
             </button>
             <button
               type="button"

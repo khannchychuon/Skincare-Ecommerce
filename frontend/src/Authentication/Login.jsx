@@ -325,35 +325,9 @@ export default function AuthForm() {
                   Register
                 </button>
               </p>
-              <p>
-                <button
-                  className="text-blue-600 hover:underline mt-1"
-                  onClick={() => setMode("forgot")}
-                >
-                  Forgot password?
-                </button>
-              </p>
+              <p></p>
             </>
           )}
-
-          {(mode === "register" || mode === "forgot" || mode === "verify") && (
-            <p className="mt-2">
-              <button
-                className="text-blue-600 hover:underline"
-                onClick={() => setMode("login")}
-              >
-                <FaArrowLeft className="inline mr-1" />
-                Back to Login
-              </button>
-            </p>
-          )}
-          <button
-            className="mt-4 flex items-center justify-center w-full border border-gray-300 rounded-md py-2 hover:bg-gray-100"
-            onClick={handleTelegramLogin}
-          >
-            <FaTelegram className="mr-2 text-blue-500" />
-            Login with Telegram
-          </button>
         </div>
       </div>
     </div>

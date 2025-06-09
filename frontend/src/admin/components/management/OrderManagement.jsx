@@ -5,18 +5,22 @@ import axios from "axios";
 import SearchBar from "../common/SearchBar";
 import Pagination from "../common/Pagination";
 import { useAuth } from "../../context/AuthContext"; // Make sure path is correct
-import Modal from "../common/Modal";
+
 export default function OrderManagement({
   setSelectedItem,
   setShowModal,
   setModalType,
 }) {
+  const token = localStorage.getItem("adminToken");
+  console.log("Token:", token);
+
   const { isAuthenticated } = useAuth();
   const [orders, setOrders] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
   const [filterStatus, setFilterStatus] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
+  const [updatingOrderId, setUpdatingOrderId] = useState(null);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -25,20 +29,18 @@ export default function OrderManagement({
         const response = await axios.get(
           "http://localhost:8000/api/admin/orders",
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            headers: { Authorization: `Bearer ${token}` },
           }
         );
 
-        const orderList = response.data.orders || response.data || []; // fallback if it's directly an array
+        const orderList = response.data.orders || response.data || [];
         const transformed = orderList.map((order) => ({
           id: order.id,
           customer: `${order.user?.first_name || "Unknown"} ${
             order.user?.last_name || ""
           }`,
           date: new Date(order.created_at).toLocaleDateString(),
-          status: order.status || "Pending ",
+          status: order.status || "Pending",
           total: parseFloat(order.total || 0),
           raw: order,
         }));
@@ -49,20 +51,39 @@ export default function OrderManagement({
       }
     };
 
-    if (isAuthenticated) {
-      fetchOrders();
-    }
+    if (isAuthenticated) fetchOrders();
   }, [isAuthenticated]);
+
+  // Handle status update
+  const handleStatusChange = async (orderId, newStatus) => {
+    setUpdatingOrderId(orderId);
+    try {
+      const token = localStorage.getItem("adminToken");
+      await axios.put(
+        `http://localhost:8000/api/admin/orders/${orderId}/status`,
+        { status: newStatus },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      // Update local state
+      setOrders((prevOrders) =>
+        prevOrders.map((order) =>
+          order.id === orderId ? { ...order, status: newStatus } : order
+        )
+      );
+    } catch (error) {
+      console.error("Failed to update status:", error);
+      alert("Failed to update order status.");
+    } finally {
+      setUpdatingOrderId(null);
+    }
+  };
 
   const handleViewOrder = (order) => {
     setSelectedItem(order.raw);
     setModalType("viewOrder");
-    setShowModal(true);
-  };
-
-  const handleUpdateStatus = (order) => {
-    setSelectedItem(order.raw);
-    setModalType("updateOrderStatus");
     setShowModal(true);
   };
 
@@ -133,36 +154,35 @@ export default function OrderManagement({
                   <td className="px-4 py-3 text-sm">{order.customer}</td>
                   <td className="px-4 py-3 text-sm">{order.date}</td>
                   <td className="px-4 py-3 text-sm">
-                    <span
-                      className={`px-2 py-1 text-xs font-semibold rounded-full ${
+                    <select
+                      disabled={updatingOrderId === order.id}
+                      className={`px-2 py-1 text-xs font-semibold rounded-full border ${
                         order.status === "Delivered"
-                          ? "bg-green-100 text-green-800"
+                          ? "bg-green-100 text-green-800 border-green-400"
                           : order.status === "Shipped"
-                          ? "bg-blue-100 text-blue-800"
-                          : "bg-yellow-100 text-yellow-800"
+                          ? "bg-blue-100 text-blue-800 border-blue-400"
+                          : "bg-yellow-100 text-yellow-800 border-yellow-400"
                       }`}
+                      value={order.status}
+                      onChange={(e) =>
+                        handleStatusChange(order.id, e.target.value)
+                      }
                     >
-                      {order.status}
-                    </span>
+                      <option value="Pending">Pending</option>
+                      <option value="Shipped">Shipped</option>
+                      <option value="Delivered">Delivered</option>
+                    </select>
                   </td>
                   <td className="px-4 py-3 text-sm">
                     ${order.total.toFixed(2)}
                   </td>
                   <td className="px-4 py-3 text-sm">
-                    <div className="flex space-x-2">
-                      <button
-                        onClick={() => handleViewOrder(order)}
-                        className="p-1 text-blue-600 hover:text-blue-800"
-                      >
-                        View
-                      </button>
-                      <button
-                        onClick={() => handleUpdateStatus(order)}
-                        className="p-1 text-green-600 hover:text-green-800"
-                      >
-                        Update
-                      </button>
-                    </div>
+                    <button
+                      onClick={() => handleViewOrder(order)}
+                      className="p-1 text-blue-600 hover:text-blue-800"
+                    >
+                      View
+                    </button>
                   </td>
                 </tr>
               ))}
