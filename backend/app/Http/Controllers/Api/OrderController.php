@@ -29,6 +29,21 @@ public function adminIndex()
     ]);
 }
 
+public function updateStatus(Request $request, $id)
+{
+
+   $order = Order::find($id);
+
+if (!$order) {
+    return response()->json(['error' => 'Order not found'], 404);
+}
+
+$order->status = $request->input('status');
+$order->save();
+
+return response()->json(['message' => 'Order status updated successfully']);
+}
+
 
     public function index()
     {

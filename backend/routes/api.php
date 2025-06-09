@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -14,33 +13,21 @@ use App\Http\Controllers\Admin\UserManagementController;
 | API Routes
 |--------------------------------------------------------------------------
 */
-
 Route::get('/products', [ProductController::class, 'filterProducts']);
 Route::get('/products/{id}', [ProductController::class, 'show']);
-// Test route
 Route::get('/test', [AuthController::class, 'test']);
 Route::post('/register', [AuthController::class, 'register']);
-
 Route::post('/login', [AuthController::class, 'login']);
-
-
 Route::middleware('auth:sanctum')->group(function () {
-
-    // Get authenticated user info
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
 
-    // Update user profile
     Route::put('/user/update', [UserController::class, 'update']);
-
-    // Logout user
-  Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
-
-
-   Route::get('/orders', [OrderController::class, 'index']);           // List all orders
-    Route::get('/orders/{id}', [OrderController::class, 'show']);       // Show specific order
-    Route::get('/user/orders', [OrderController::class, 'userOrders']); // Orders of authenticated user
+    Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
+    Route::get('/orders', [OrderController::class, 'index']);           
+    Route::get('/orders/{id}', [OrderController::class, 'show']);       
+    Route::get('/user/orders', [OrderController::class, 'userOrders']);
 });
 Route::middleware('auth:sanctum')->post('/orders', [OrderController::class, 'store']);
 
@@ -61,7 +48,7 @@ Route::prefix('admin')->group(function () {
   Route::get('/users', [UserManagementController::class, 'index']);
     // Admin order list
     Route::get('/orders', [OrderController::class, 'adminIndex']);
-    Route::put('/admin/orders/{id}/status', [AdminOrderController::class, 'updateStatus']);
+    Route::put('/orders/{orderId}/status', [OrderController::class, 'updateStatus']);
 
 
     });
