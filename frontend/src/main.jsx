@@ -3,8 +3,9 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./index.css";
 import Admin from "./Admin";
+import { User } from "lucide-react";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <Admin />
+    <App />
   </React.StrictMode>
 );
