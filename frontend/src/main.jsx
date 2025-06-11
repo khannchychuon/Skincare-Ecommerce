@@ -5,6 +5,6 @@ import "./index.css";
 import Admin from "./Admin";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <Admin />
+    <App />
   </React.StrictMode>
 );

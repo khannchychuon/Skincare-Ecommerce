@@ -33,7 +33,7 @@ const BrandFeature = () => {
       id: 5,
       name: "Round Lab",
       logo: "/images/brands/roundlab-logo.webp",
-      slug: "round-lab",
+      slug: "roundlab",
     },
     {
       id: 6,

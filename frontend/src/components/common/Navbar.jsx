@@ -5,10 +5,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { Search, User, ShoppingBag, Menu, X, Heart } from "lucide-react";
 
+const backendBaseUrl = "http://localhost:8000";
+
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [allProducts, setAllProducts] = useState([]);
   const [showResults, setShowResults] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -22,26 +25,51 @@ const Navbar = () => {
     0
   );
 
+  // Check login status
   useEffect(() => {
     const token = localStorage.getItem("authToken");
     setIsLoggedIn(!!token);
   }, []);
 
+  // Fetch all products once
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch(`${backendBaseUrl}/api/products`);
+        const data = await response.json();
+        setAllProducts(data.products || []);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  // Filter products on search
   useEffect(() => {
     if (searchQuery.trim()) {
-      setSearchResults([]);
+      const filtered = allProducts.filter((product) =>
+        product.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setSearchResults(filtered);
       setShowResults(true);
     } else {
-      setSearchResults([]);
       setShowResults(false);
     }
-  }, [searchQuery]);
+  }, [searchQuery, allProducts]);
 
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
       console.log("Searching:", searchQuery);
     }
+  };
+
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) return "/images/placeholder-product.png";
+    if (imagePath.startsWith("http")) return imagePath;
+    return `${backendBaseUrl}/${imagePath}`;
   };
 
   const handleKeyDown = (e) => {
@@ -51,7 +79,7 @@ const Navbar = () => {
   const closeResults = () => setTimeout(() => setShowResults(false), 200);
 
   const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
+    setIsDropdownOpen((prev) => !prev);
   };
 
   const handleLogout = () => {
@@ -61,6 +89,7 @@ const Navbar = () => {
     navigate("/");
   };
 
+  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -71,8 +100,10 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // The rest of your JSX remains unchanged...
+
   return (
-    <nav className="bg-white/95 backdrop-blur-md sticky top-0 z-50 shadow-lg border-b border-teal-100">
+    <nav className="bg-white/95 backdrop-blur-md sticky top-0 z-50  ">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <button
@@ -130,13 +161,42 @@ const Navbar = () => {
 
             {showResults && (
               <div className="absolute top-full left-0 right-0 bg-white/95 backdrop-blur-md border border-teal-100 rounded-2xl shadow-2xl z-50 mt-2 max-h-96 overflow-y-auto">
-                <div className="p-6 text-gray-500 text-center text-sm">
-                  <Search size={24} className="mx-auto mb-2 text-teal-300" />
-                  <p>No results found for "{searchQuery}"</p>
-                  <p className="text-xs mt-1">
-                    Try searching for lipstick, foundation, or skincare
-                  </p>
-                </div>
+                {searchResults.length > 0 ? (
+                  <ul>
+                    {searchResults.map((product) => (
+                      <li
+                        key={product.id}
+                        className="px-4 py-2 hover:bg-teal-50 cursor-pointer flex items-center gap-3"
+                      >
+                        <Link
+                          to={`/products/${product.id}`}
+                          onClick={closeResults}
+                          className="flex items-center gap-3"
+                        >
+                          <img
+                            src={getImageUrl(product.image)}
+                            alt={product.name}
+                            className="w-10 h-10 object-cover rounded-full border border-teal-100"
+                            onError={(e) => {
+                              e.target.src = "/images/placeholder-product.png";
+                            }}
+                          />
+                          <span className="text-sm font-medium text-gray-700">
+                            {product.name}
+                          </span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <div className="p-6 text-gray-500 text-center text-sm">
+                    <Search size={24} className="mx-auto mb-2 text-teal-300" />
+                    <p>No results found for "{searchQuery}"</p>
+                    <p className="text-xs mt-1">
+                      Try searching for lipstick, foundation, or skincare
+                    </p>
+                  </div>
+                )}
               </div>
             )}
           </div>
