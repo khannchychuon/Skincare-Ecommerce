@@ -5,6 +5,18 @@ import { useParams } from "react-router-dom";
 import { Star, Minus, Plus, ShoppingBag } from "lucide-react";
 import { useCart } from "../context/CartContext";
 
+const backendBaseUrl = "http://127.0.0.1:8000";
+
+// Unified image URL fix
+const getImageUrl = (imagePath) => {
+  if (!imagePath) return "/images/placeholder-product.png";
+  if (imagePath.startsWith("http")) {
+    return imagePath.replace("/storage/storage/", "/storage/");
+  }
+  const cleanedPath = imagePath.replace(/^\/?storage\/?/, "storage/");
+  return `${backendBaseUrl}/${cleanedPath}`;
+};
+
 const ProductDetail = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
@@ -16,14 +28,9 @@ const ProductDetail = () => {
   useEffect(() => {
     const getProduct = async () => {
       try {
-        const response = await fetch(
-          `http://127.0.0.1:8000/api/products/${id}`
-        );
-        if (!response.ok) {
-          throw new Error("Product not found");
-        }
+        const response = await fetch(`${backendBaseUrl}/api/products/${id}`);
+        if (!response.ok) throw new Error("Product not found");
         const data = await response.json();
-        console.log("Fetched product price:", data.product.price); // debug
         setProduct(data.product);
       } catch (error) {
         console.error("Error fetching product:", error);
@@ -35,54 +42,45 @@ const ProductDetail = () => {
 
     getProduct();
   }, [id]);
-  const formatImageUrl = (path) => {
-    if (!path) return "/placeholder.svg";
-    return path.startsWith("http")
-      ? path
-      : `http://127.0.0.1:8000/${path.replace(/^\/?storage/, "storage")}`;
-  };
 
   const decreaseQuantity = () => {
-    if (quantity > 1) {
-      setQuantity(quantity - 1);
-    }
+    if (quantity > 1) setQuantity(quantity - 1);
   };
 
-  const increaseQuantity = () => {
-    setQuantity(quantity + 1);
-  };
+  const increaseQuantity = () => setQuantity(quantity + 1);
 
   const handleAddToCart = () => {
     if (product) {
-      addToCart({
-        ...product,
+      const productToAdd = {
+        id: product.id,
+        name: product.name,
+        price: Number(product.price),
+        image: getImageUrl(product.image), // fix here
+        category: product.category,
         quantity,
-      });
+      };
+      addToCart(productToAdd);
     }
   };
 
   if (loading) {
     return (
-      <div className="section-container">
-        <div className="text-center">
-          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-pink-400 border-r-transparent"></div>
-          <p className="mt-2 text-gray-600">Loading product...</p>
-        </div>
+      <div className="section-container text-center">
+        <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-pink-400 border-r-transparent"></div>
+        <p className="mt-2 text-gray-600">Loading product...</p>
       </div>
     );
   }
 
   if (!product) {
     return (
-      <div className="section-container">
-        <div className="text-center py-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">
-            Product Not Found
-          </h2>
-          <p className="text-gray-600">
-            The product you're looking for doesn't exist or has been removed.
-          </p>
-        </div>
+      <div className="section-container text-center py-12">
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">
+          Product Not Found
+        </h2>
+        <p className="text-gray-600">
+          The product you're looking for doesn't exist or has been removed.
+        </p>
       </div>
     );
   }
@@ -90,27 +88,41 @@ const ProductDetail = () => {
   return (
     <div className="section-container">
       <div className="grid md:grid-cols-2 gap-12">
-        <div className="grid grid-cols-3 gap-4 mt-4">
-          {[product.image_2, product.image_3, product.image_4].map(
-            (image, index) => (
+        {/* Images */}
+
+        <div>
+          <img
+            src={getImageUrl(product.image)}
+            alt={product.name}
+            className="mb-4  rounded-md w-96 h-72 mt-2 ml-24"
+          />
+          <div className="grid grid-cols-4 gap-2 mt-2">
+            {[
+              product.image,
+              product.image_2,
+              product.image_3,
+              product.image_4,
+            ].map((image, index) => (
               <img
                 key={index}
-                src={formatImageUrl(image)}
+                src={getImageUrl(image)}
                 alt={`${product.name} thumbnail ${index + 1}`}
-                className={`w-full h-32 object-cover rounded-xl cursor-pointer transition duration-200 hover:scale-105 ${
+                className={`rounded-md cursor-pointer ${
                   index === 0 ? "border-2 border-pink-400" : ""
                 }`}
               />
-            )
-          )}
+            ))}
+          </div>
         </div>
 
+        {/* Product Info */}
         <div>
           <div className="mb-2 text-sm text-gray-500">{product.category}</div>
           <h1 className="text-3xl font-bold text-gray-900 mb-4">
             {product.name}
           </h1>
 
+          {/* Ratings */}
           <div className="flex items-center mb-4">
             <div className="flex mr-2">
               {[...Array(5)].map((_, i) => (
@@ -136,6 +148,7 @@ const ProductDetail = () => {
 
           <p className="text-gray-600 mb-6">{product.description}</p>
 
+          {/* Quantity & Add to Cart */}
           <div className="mb-6">
             <div className="flex items-center mb-4">
               <div className="mr-6">
@@ -172,52 +185,30 @@ const ProductDetail = () => {
             </button>
           </div>
 
+          {/* Tabs */}
           <div className="border-t border-gray-200 pt-6">
             <div className="flex border-b border-gray-200">
-              <button
-                className={`pb-2 px-4 text-sm font-medium ${
-                  activeTab === "description"
-                    ? "text-pink-400 border-b-2 border-pink-400"
-                    : "text-gray-500 hover:text-gray-700"
-                }`}
-                onClick={() => setActiveTab("description")}
-              >
-                Description
-              </button>
-              <button
-                className={`pb-2 px-4 text-sm font-medium ${
-                  activeTab === "ingredients"
-                    ? "text-pink-400 border-b-2 border-pink-400"
-                    : "text-gray-500 hover:text-gray-700"
-                }`}
-                onClick={() => setActiveTab("ingredients")}
-              >
-                Ingredients
-              </button>
-              <button
-                className={`pb-2 px-4 text-sm font-medium ${
-                  activeTab === "how_to_use"
-                    ? "text-pink-400 border-b-2 border-pink-400"
-                    : "text-gray-500 hover:text-gray-700"
-                }`}
-                onClick={() => setActiveTab("how_to_use")}
-              >
-                How to Use
-              </button>
+              {["description", "ingredients", "how_to_use"].map((tab) => (
+                <button
+                  key={tab}
+                  className={`pb-2 px-4 text-sm font-medium ${
+                    activeTab === tab
+                      ? "text-pink-400 border-b-2 border-pink-400"
+                      : "text-gray-500 hover:text-gray-700"
+                  }`}
+                  onClick={() => setActiveTab(tab)}
+                >
+                  {tab
+                    .replace("_", " ")
+                    .replace(/\b\w/g, (c) => c.toUpperCase())}
+                </button>
+              ))}
             </div>
 
-            <div className="py-4">
-              {activeTab === "description" && (
-                <p className="text-gray-600">{product.description}</p>
-              )}
-
-              {activeTab === "ingredients" && (
-                <p className="text-gray-600">{product.ingredients}</p>
-              )}
-
-              {activeTab === "how_to_use" && (
-                <p className="text-gray-600">{product.how_to_use}</p>
-              )}
+            <div className="py-4 text-gray-600">
+              {activeTab === "description" && <p>{product.description}</p>}
+              {activeTab === "ingredients" && <p>{product.ingredients}</p>}
+              {activeTab === "how_to_use" && <p>{product.how_to_use}</p>}
             </div>
           </div>
         </div>
