@@ -19,29 +19,28 @@ export default function HeroBanner() {
     }, 3000);
 
     return () => clearInterval(interval);
-  }, [isHovered, images.length]);
+  }, [isHovered]);
 
   return (
     <div className="relative w-full px-4 pt-4">
-      {" "}
-      {/* Added top padding */}
+      {/* Carousel Container */}
       <div
-        className="relative w-full h-[55vh] min-h-[400px] overflow-hidden rounded-xl md:rounded-2xl"
+        className="relative w-full aspect-[16/9] sm:aspect-[16/7] md:aspect-[16/6] overflow-hidden rounded-xl shadow-md"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        {/* Slide container */}
+        {/* Image Slides */}
         <div className="relative w-full h-full">
           {images.map((image, index) => (
             <div
               key={index}
               className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ${
-                index === currentIndex ? "opacity-100" : "opacity-0"
+                index === currentIndex ? "opacity-100 z-10" : "opacity-0"
               }`}
             >
               <img
                 src={image}
-                alt=""
+                alt={`Slide ${index + 1}`}
                 className="w-full h-full object-cover object-center"
                 loading={index === 0 ? "eager" : "lazy"}
               />
@@ -49,14 +48,14 @@ export default function HeroBanner() {
           ))}
         </div>
 
-        {/* Navigation dots */}
-        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+        {/* Navigation Dots */}
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-20">
           {images.map((_, index) => (
             <button
               key={index}
               onClick={() => setCurrentIndex(index)}
-              className={`h-[3px] w-6 rounded-full transition-all duration-300 ${
-                index === currentIndex ? "bg-white w-8" : "bg-white/50"
+              className={`h-[3px] w-5 rounded-full transition-all duration-300 ${
+                index === currentIndex ? "bg-white w-7" : "bg-white/40"
               }`}
               aria-label={`Go to slide ${index + 1}`}
             />

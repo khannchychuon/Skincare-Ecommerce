@@ -11,7 +11,7 @@ const Cart = () => {
     return total + item.price * item.quantity;
   }, 0);
 
-  const shipping = subtotal > 0 ? 5.99 : 0;
+  const shipping = subtotal > 0 ? 3.5 : 0;
   const total = subtotal + shipping;
   const getImageUrl = (imagePath) => {
     if (!imagePath) return "/images/placeholder-product.png";

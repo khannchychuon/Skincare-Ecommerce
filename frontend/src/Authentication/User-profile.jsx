@@ -191,201 +191,189 @@ const UserProfile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-blue-50 py-10">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         {/* Profile Section */}
-        <div className="bg-white p-6 mb-1">
-          <div className="flex items-center justify-between mb-6">
-            <h1 className="text-2xl font-bold text-gray-900 flex items-center">
+        <div className="bg-white rounded-3xl  overflow-hidden border border-gray-200">
+          <div className="bg-gradient-to-r from-teal-500 to-blue-500 p-6 text-white flex items-center justify-between">
+            <h1 className="text-xl font-bold tracking-wide flex items-center gap-2">
+              <User className="h-6 w-6 text-white" />
               User Profile
             </h1>
             {!isEditing && (
-              <button
-                onClick={() => setIsEditing(true)}
-                className=" text-white px-4 py-2 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
-              ></button>
+              <button onClick={() => setIsEditing(true)} className=""></button>
             )}
           </div>
 
-          {statusMessage && (
-            <div
-              className={`p-3 rounded-md mb-4 ${
-                statusMessage.includes("successfully") ||
-                statusMessage.includes("Success")
-                  ? "bg-green-100 text-green-700 border border-green-200"
-                  : "bg-red-100 text-red-700 border border-red-200"
-              }`}
-            >
-              <p className="text-sm">{statusMessage}</p>
-            </div>
-          )}
+          <div className="p-6 space-y-5">
+            {statusMessage && (
+              <div
+                className={`p-3 rounded-md font-medium shadow-sm ${
+                  statusMessage.toLowerCase().includes("success")
+                    ? "bg-green-100 text-green-700 border border-green-300"
+                    : "bg-red-100 text-red-700 border border-red-300"
+                }`}
+              >
+                {statusMessage}
+              </div>
+            )}
 
-          {isEditing ? (
-            <div className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {isEditing ? (
+              <div className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  <div>
+                    <label className="text-sm font-semibold text-gray-700">
+                      First Name *
+                    </label>
+                    <input
+                      type="text"
+                      value={editForm.first_name}
+                      onChange={(e) =>
+                        setEditForm({ ...editForm, first_name: e.target.value })
+                      }
+                      placeholder="John"
+                      className={`mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-teal-500 ${
+                        errors.first_name ? "border-red-500" : "border-gray-300"
+                      }`}
+                    />
+                    {errors.first_name && (
+                      <p className="text-sm text-red-600 mt-1">
+                        {errors.first_name}
+                      </p>
+                    )}
+                  </div>
+                  <div>
+                    <label className="text-sm font-semibold text-gray-700">
+                      Last Name *
+                    </label>
+                    <input
+                      type="text"
+                      value={editForm.last_name}
+                      onChange={(e) =>
+                        setEditForm({ ...editForm, last_name: e.target.value })
+                      }
+                      placeholder="Doe"
+                      className={`mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-teal-500 ${
+                        errors.last_name ? "border-red-500" : "border-gray-300"
+                      }`}
+                    />
+                    {errors.last_name && (
+                      <p className="text-sm text-red-600 mt-1">
+                        {errors.last_name}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    First Name *
+                  <label className="text-sm font-semibold text-gray-700">
+                    Phone Number *
                   </label>
                   <input
-                    type="text"
-                    value={editForm.first_name}
+                    type="tel"
+                    value={editForm.phone}
                     onChange={(e) =>
-                      setEditForm({ ...editForm, first_name: e.target.value })
+                      setEditForm({ ...editForm, phone: e.target.value })
                     }
-                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors.first_name ? "border-red-500" : "border-gray-300"
+                    placeholder="0123456789"
+                    className={`mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-teal-500 ${
+                      errors.phone ? "border-red-500" : "border-gray-300"
                     }`}
-                    placeholder="Enter first name"
                   />
-                  {errors.first_name && (
-                    <p className="text-red-500 text-sm mt-1">
-                      {errors.first_name}
-                    </p>
+                  {errors.phone && (
+                    <p className="text-sm text-red-600 mt-1">{errors.phone}</p>
                   )}
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Last Name *
-                  </label>
-                  <input
-                    type="text"
-                    value={editForm.last_name}
-                    onChange={(e) =>
-                      setEditForm({ ...editForm, last_name: e.target.value })
-                    }
-                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors.last_name ? "border-red-500" : "border-gray-300"
-                    }`}
-                    placeholder="Enter last name"
-                  />
-                  {errors.last_name && (
-                    <p className="text-red-500 text-sm mt-1">
-                      {errors.last_name}
+                <div className="flex gap-3 pt-3">
+                  <button
+                    onClick={handleSave}
+                    className="bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700 transition shadow"
+                  >
+                    Save
+                  </button>
+                  <button
+                    onClick={handleCancel}
+                    className="bg-gray-500 text-white px-5 py-2 rounded-lg hover:bg-gray-600 transition shadow"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="flex items-center gap-4">
+                  <div className="bg-teal-100 p-3 rounded-full">
+                    <User className="h-6 w-6 text-teal-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Full Name</p>
+                    <p className="text-lg font-medium text-gray-900">
+                      {userProfile.first_name || "Not set"}{" "}
+                      {userProfile.last_name || ""}
                     </p>
-                  )}
+                  </div>
                 </div>
-              </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Phone Number *
-                </label>
-                <input
-                  type="tel"
-                  value={editForm.phone}
-                  onChange={(e) =>
-                    setEditForm({ ...editForm, phone: e.target.value })
-                  }
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    errors.phone ? "border-red-500" : "border-gray-300"
-                  }`}
-                  placeholder="Enter phone number"
-                />
-                {errors.phone && (
-                  <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
-                )}
-              </div>
-
-              <div className="flex space-x-3 pt-4">
-                <button
-                  onClick={handleSave}
-                  className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500"
-                >
-                  Save Changes
-                </button>
-                <button
-                  onClick={handleCancel}
-                  className="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500"
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="flex items-center">
-                <div className="bg-blue-100 p-3 rounded-full mr-4">
-                  <User className="h-6 w-6 text-blue-600" />
-                </div>
-                <div>
-                  <p className="text-sm text-gray-600">Full Name</p>
-                  <p className="text-lg font-semibold text-gray-900">
-                    {userProfile.first_name || "Not set"}{" "}
-                    {userProfile.last_name || ""}
-                  </p>
+                <div className="flex items-center gap-4">
+                  <div className="bg-emerald-100 p-3 rounded-full">
+                    <Phone className="h-6 w-6 text-emerald-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Phone Number</p>
+                    <p className="text-lg font-medium text-gray-900">
+                      {userProfile.phone || "Not set"}
+                    </p>
+                  </div>
                 </div>
               </div>
-
-              <div className="flex items-center">
-                <div className="bg-green-100 p-3 rounded-full mr-4">
-                  <Phone className="h-6 w-6 text-green-600" />
-                </div>
-                <div>
-                  <p className="text-sm text-gray-600">Phone Number</p>
-                  <p className="text-lg font-semibold text-gray-900">
-                    {userProfile.phone || "Not set"}
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
 
         {/* Order History Section */}
-        <div className="min-h-screen bg-gray-50 py-10 px-4 md:px-3">
-          <div className="max-w-4xl mx-auto">
-            {/* Profile section */}
-            {/* ... Profile rendering logic here ... */}
-
-            {/* Order History section */}
-            <div className="bg-white rounded-lg shadow-md max-h-[80vh] overflow-y-auto p-3">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-                <Package className="mr-3 h-6 w-6 text-purple-600" /> Order
-                History
-              </h2>
-              {orderHistory.length === 0 ? (
-                <p className="text-gray-500">You have no orders yet.</p>
-              ) : (
-                <ul className="space-y-4">
-                  {orderHistory.map((order, idx) => (
-                    <li
-                      key={idx}
-                      className="p-4 border border-gray-200 rounded-md"
-                    >
-                      {/* Loop through order items */}
-                      <div className="mt-4 space-y-2">
-                        {order.items?.map((item, index) => (
-                          <div
-                            key={index}
-                            className="flex items-center gap-4 bg-gray-50 p-3 rounded"
-                          >
-                            <img
-                              src={getImageUrl(item.product.image)}
-                              alt={item.product.name}
-                              className="w-16 h-16 object-cover rounded"
-                            />
-                            <div>
-                              <p className="text-sm font-medium text-gray-800">
-                                {item.product.name}
-                              </p>
-                              <p className="text-sm text-gray-600">
-                                Qty: {item.quantity}
-                              </p>
-                              <p className="text-sm text-gray-600">
-                                Price: {formatPrice(item.price)}
-                              </p>
-                            </div>
-                          </div>
-                        ))}
+        <div className="bg-white rounded-3xl p-6 border border-gray-200">
+          <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+            <Package className="h-6 w-6 text-purple-600" /> Order History
+          </h2>
+          {orderHistory.length === 0 ? (
+            <p className="text-gray-500">You have no orders yet.</p>
+          ) : (
+            <ul className="space-y-4 max-h-[60vh] overflow-y-auto">
+              {orderHistory.map((order, idx) => (
+                <li
+                  key={idx}
+                  className="border border-gray-100 bg-gray-50 p-4 rounded-lg shadow-sm"
+                >
+                  <div className="space-y-3">
+                    {order.items?.map((item, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center gap-4 bg-white rounded-lg p-3 shadow-sm"
+                      >
+                        <img
+                          src={getImageUrl(item.product.image)}
+                          alt={item.product.name}
+                          className="w-14 h-14 rounded object-cover"
+                        />
+                        <div>
+                          <p className="text-sm font-semibold text-gray-800">
+                            {item.product.name}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            Qty: {item.quantity}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            Price: {formatPrice(item.price)}
+                          </p>
+                        </div>
                       </div>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          </div>
+                    ))}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       </div>
     </div>

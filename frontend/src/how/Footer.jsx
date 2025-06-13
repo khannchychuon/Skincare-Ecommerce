@@ -7,7 +7,7 @@ import {
   Mail,
   Youtube,
 } from "lucide-react";
-
+import { Heart } from "lucide-react";
 export default function Footer() {
   return (
     <footer className="bg-[#2f4f4f] border-t border-gray-200 pt-10 pb-6">
@@ -16,14 +16,31 @@ export default function Footer() {
           {/* Logo and About Section */}
           <div>
             <div className="flex items-center mb-4">
-              <img
-                src="/images/lipstick-icon.png"
-                alt=""
-                className="h-10 w-10"
-              />
-              <span className="ml-3 font-serif text-xl text-white-800">
-                Cosmetic <span className="text-pink-500">Store</span>
-              </span>
+              <Link to="/" className="flex items-center space-x-3 group">
+                <div className="relative">
+                  <div className="h-12 w-12 bg-gradient-to-br from-teal-400 via-teal-500 to-teal-600 rounded-full flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
+                    <Heart
+                      size={20}
+                      className="text-white"
+                      fill="currentColor"
+                    />
+                  </div>
+                  <div className="absolute -top-1 -right-1 h-4 w-4 bg-yellow-400 rounded-full animate-pulse"></div>
+                </div>
+                <div className="flex flex-col">
+                  <div className="flex items-center">
+                    <span className="font-serif text-2xl font-bold bg-gradient-to-r from-teal-600 to-teal-700 bg-clip-text text-transparent">
+                      Cosmetic
+                    </span>
+                    <span className="font-serif text-2xl font-bold text-gray-800 ml-1">
+                      Store
+                    </span>
+                  </div>
+                  <span className="text-xs text-gray-500 -mt-1">
+                    Beauty & Elegance
+                  </span>
+                </div>
+              </Link>
             </div>
             <p className="text-white mb-6">Welcome to our skincare website.</p>
           </div>

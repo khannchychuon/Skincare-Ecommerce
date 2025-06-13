@@ -38,7 +38,7 @@ const ProductCard = ({ product, showDiscount = false }) => {
       <div className="p-4 space-y-3">
         <div className="flex justify-between items-start gap-2">
           <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-gray-800 text-base leading-tight line-clamp-2">
+            <h3 className="font-semibold text-gray-800 text-base leading-tight line-clamp-1">
               <Link
                 to={`/products/${product.id}`}
                 className="hover:text-teal-500 transition-colors"

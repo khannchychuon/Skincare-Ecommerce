@@ -35,6 +35,12 @@ const ProductDetail = () => {
 
     getProduct();
   }, [id]);
+  const formatImageUrl = (path) => {
+    if (!path) return "/placeholder.svg";
+    return path.startsWith("http")
+      ? path
+      : `http://127.0.0.1:8000/${path.replace(/^\/?storage/, "storage")}`;
+  };
 
   const decreaseQuantity = () => {
     if (quantity > 1) {
@@ -84,34 +90,19 @@ const ProductDetail = () => {
   return (
     <div className="section-container">
       <div className="grid md:grid-cols-2 gap-12">
-        <div>
-          <img
-            src={product.image || "/placeholder.svg"}
-            alt={product.name}
-            className="w-full rounded-lg shadow-md"
-          />
-          <div className="grid grid-cols-4 gap-2 mt-4">
-            <img
-              src={product.image || "/placeholder.svg"}
-              alt={`${product.name} thumbnail`}
-              className="rounded-md cursor-pointer border-2 border-pink-400"
-            />
-            <img
-              src="/placeholder.svg?height=100&width=100"
-              alt={`${product.name} thumbnail`}
-              className="rounded-md cursor-pointer"
-            />
-            <img
-              src="/placeholder.svg?height=100&width=100"
-              alt={`${product.name} thumbnail`}
-              className="rounded-md cursor-pointer"
-            />
-            <img
-              src="/placeholder.svg?height=100&width=100"
-              alt={`${product.name} thumbnail`}
-              className="rounded-md cursor-pointer"
-            />
-          </div>
+        <div className="grid grid-cols-3 gap-4 mt-4">
+          {[product.image_2, product.image_3, product.image_4].map(
+            (image, index) => (
+              <img
+                key={index}
+                src={formatImageUrl(image)}
+                alt={`${product.name} thumbnail ${index + 1}`}
+                className={`w-full h-32 object-cover rounded-xl cursor-pointer transition duration-200 hover:scale-105 ${
+                  index === 0 ? "border-2 border-pink-400" : ""
+                }`}
+              />
+            )
+          )}
         </div>
 
         <div>
