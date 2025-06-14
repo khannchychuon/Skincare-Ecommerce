@@ -7,7 +7,6 @@ import { useCart } from "../context/CartContext";
 
 const backendBaseUrl = "http://127.0.0.1:8000";
 
-// Unified image URL fix
 const getImageUrl = (imagePath) => {
   if (!imagePath) return "/images/placeholder-product.png";
   if (imagePath.startsWith("http")) {
@@ -24,6 +23,8 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState("description");
   const { addToCart } = useCart();
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const getProduct = async () => {
@@ -32,6 +33,7 @@ const ProductDetail = () => {
         if (!response.ok) throw new Error("Product not found");
         const data = await response.json();
         setProduct(data.product);
+        setSelectedImage(data.product.image);
       } catch (error) {
         console.error("Error fetching product:", error);
         setProduct(null);
@@ -55,7 +57,7 @@ const ProductDetail = () => {
         id: product.id,
         name: product.name,
         price: Number(product.price),
-        image: getImageUrl(product.image), // fix here
+        image: getImageUrl(product.image),
         category: product.category,
         quantity,
       };
@@ -85,35 +87,56 @@ const ProductDetail = () => {
     );
   }
 
+  const allImages = [
+    product.image,
+    product.image_2,
+    product.image_3,
+    product.image_4,
+  ];
+
   return (
     <div className="section-container">
       <div className="grid md:grid-cols-2 gap-12">
         {/* Images */}
+        <div className="w-full px-4 sm:px-8 max-w-screen-md mx-auto">
+          <div className="flex justify-center">
+            <img
+              src={getImageUrl(selectedImage)}
+              alt={product.name}
+              onClick={() => setIsModalOpen(true)}
+              className="w-96 max-w-md h-96 object-cover rounded-xl cursor-zoom-in transition-transform duration-300 hover:scale-105"
+            />
+          </div>
 
-        <div>
-          <img
-            src={getImageUrl(product.image)}
-            alt={product.name}
-            className="mb-4  rounded-md w-96 h-72 mt-2 ml-24"
-          />
-          <div className="grid grid-cols-4 gap-2 mt-2">
-            {[
-              product.image,
-              product.image_2,
-              product.image_3,
-              product.image_4,
-            ].map((image, index) => (
+          <div className="mt-4 flex gap-2 overflow-x-auto scrollbar-hide sm:justify-center">
+            {allImages.map((image, index) => (
               <img
                 key={index}
                 src={getImageUrl(image)}
                 alt={`${product.name} thumbnail ${index + 1}`}
-                className={`rounded-md cursor-pointer ${
-                  index === 0 ? "border-2 border-pink-400" : ""
+                onClick={() => setSelectedImage(image)}
+                className={`w-20 h-20 object-cover rounded-lg cursor-pointer flex-shrink-0 transition-all duration-200 hover:scale-105 ${
+                  selectedImage === image
+                    ? "border-2 border-teal-400 ring-2 ring-teal-100"
+                    : "border border-gray-300"
                 }`}
               />
             ))}
           </div>
         </div>
+
+        {isModalOpen && (
+          <div
+            onClick={() => setIsModalOpen(false)}
+            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center"
+          >
+            <img
+              src={getImageUrl(selectedImage)}
+              alt="Zoomed product"
+              className="w-[90%] max-w-3xl rounded-lg object-contain cursor-zoom-out transition-transform duration-300 scale-100 hover:scale-105"
+            />
+          </div>
+        )}
 
         {/* Product Info */}
         <div>
@@ -122,7 +145,6 @@ const ProductDetail = () => {
             {product.name}
           </h1>
 
-          {/* Ratings */}
           <div className="flex items-center mb-4">
             <div className="flex mr-2">
               {[...Array(5)].map((_, i) => (
@@ -148,7 +170,6 @@ const ProductDetail = () => {
 
           <p className="text-gray-600 mb-6">{product.description}</p>
 
-          {/* Quantity & Add to Cart */}
           <div className="mb-6">
             <div className="flex items-center mb-4">
               <div className="mr-6">
@@ -185,7 +206,6 @@ const ProductDetail = () => {
             </button>
           </div>
 
-          {/* Tabs */}
           <div className="border-t border-gray-200 pt-6">
             <div className="flex border-b border-gray-200">
               {["description", "ingredients", "how_to_use"].map((tab) => (
@@ -193,7 +213,7 @@ const ProductDetail = () => {
                   key={tab}
                   className={`pb-2 px-4 text-sm font-medium ${
                     activeTab === tab
-                      ? "text-pink-400 border-b-2 border-pink-400"
+                      ? "text-teal-600 border-b-2 border-teal-100"
                       : "text-gray-500 hover:text-gray-700"
                   }`}
                   onClick={() => setActiveTab(tab)}
