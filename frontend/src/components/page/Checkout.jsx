@@ -114,8 +114,6 @@ const Checkout = () => {
 
   return (
     <div className="section-container">
-      <h1 className="text-3xl font-bold text-gray-900 mb-8">Checkout</h1>
-
       <div className="grid md:grid-cols-3 gap-8">
         {/* FORM */}
         <div className="md:col-span-2">

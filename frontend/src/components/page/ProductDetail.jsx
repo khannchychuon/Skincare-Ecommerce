@@ -95,19 +95,20 @@ const ProductDetail = () => {
   ];
 
   return (
-    <div className="section-container">
-      <div className="grid md:grid-cols-2 gap-12">
+    <div className="section-container px-4 sm:px-6 lg:px-8 py-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
         {/* Images */}
-        <div className="w-full px-4 sm:px-8 max-w-screen-md mx-auto">
+        <div className="w-full">
           <div className="flex justify-center">
             <img
               src={getImageUrl(selectedImage)}
               alt={product.name}
               onClick={() => setIsModalOpen(true)}
-              className="w-96 max-w-md h-96 object-cover rounded-xl cursor-zoom-in transition-transform duration-300 hover:scale-105"
+              className="w-full max-w-sm sm:max-w-md h-auto aspect-square object-cover rounded-xl cursor-zoom-in transition-transform duration-300 hover:scale-105"
             />
           </div>
 
+          {/* Thumbnails */}
           <div className="mt-4 flex gap-2 overflow-x-auto scrollbar-hide sm:justify-center">
             {allImages.map((image, index) => (
               <img
@@ -125,23 +126,24 @@ const ProductDetail = () => {
           </div>
         </div>
 
+        {/* Modal Zoom Image */}
         {isModalOpen && (
           <div
             onClick={() => setIsModalOpen(false)}
-            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center"
+            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center px-4"
           >
             <img
               src={getImageUrl(selectedImage)}
               alt="Zoomed product"
-              className="w-[90%] max-w-3xl rounded-lg object-contain cursor-zoom-out transition-transform duration-300 scale-100 hover:scale-105"
+              className="w-full max-w-3xl h-auto max-h-[90vh] rounded-lg object-contain cursor-zoom-out transition-transform duration-300 scale-100 hover:scale-105"
             />
           </div>
         )}
 
         {/* Product Info */}
-        <div>
-          <div className="mb-2 text-sm text-gray-500">{product.category}</div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">
+        <div className="w-full">
+          <div className="text-sm text-gray-500 mb-1">{product.category}</div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
             {product.name}
           </h1>
 
@@ -164,54 +166,56 @@ const ProductDetail = () => {
             </span>
           </div>
 
-          <div className="text-2xl font-bold text-gray-900 mb-6">
+          <div className="text-2xl font-bold text-gray-900 mb-4">
             ${product.price ? Number(product.price).toFixed(2) : "0.00"}
           </div>
 
-          <p className="text-gray-600 mb-6">{product.description}</p>
+          <p className="text-gray-600 mb-6 text-sm sm:text-base">
+            {product.description}
+          </p>
 
+          {/* Quantity + Add to Cart */}
           <div className="mb-6">
-            <div className="flex items-center mb-4">
-              <div className="mr-6">
-                <label
-                  htmlFor="quantity"
-                  className="block text-sm font-medium text-gray-700 mb-1"
+            <div className="mb-4">
+              <label
+                htmlFor="quantity"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Quantity
+              </label>
+              <div className="flex items-center border border-gray-300 rounded-md w-max">
+                <button
+                  onClick={decreaseQuantity}
+                  className="px-3 py-2 text-gray-600 hover:bg-gray-100"
                 >
-                  Quantity
-                </label>
-                <div className="flex items-center border border-gray-300 rounded-md">
-                  <button
-                    onClick={decreaseQuantity}
-                    className="px-3 py-2 text-gray-600 hover:bg-gray-100"
-                  >
-                    <Minus size={16} />
-                  </button>
-                  <span className="px-4 py-2 text-gray-900">{quantity}</span>
-                  <button
-                    onClick={increaseQuantity}
-                    className="px-3 py-2 text-gray-600 hover:bg-gray-100"
-                  >
-                    <Plus size={16} />
-                  </button>
-                </div>
+                  <Minus size={16} />
+                </button>
+                <span className="px-4 py-2 text-gray-900">{quantity}</span>
+                <button
+                  onClick={increaseQuantity}
+                  className="px-3 py-2 text-gray-600 hover:bg-gray-100"
+                >
+                  <Plus size={16} />
+                </button>
               </div>
             </div>
 
             <button
               onClick={handleAddToCart}
-              className="w-full btn-primary flex items-center justify-center"
+              className="w-full py-3 bg-teal-600 hover:bg-teal-700 text-white rounded-lg flex items-center justify-center font-medium transition-all duration-200"
             >
               <ShoppingBag size={18} className="mr-2" />
               Add to Cart
             </button>
           </div>
 
+          {/* Tabs */}
           <div className="border-t border-gray-200 pt-6">
-            <div className="flex border-b border-gray-200">
+            <div className="flex overflow-x-auto border-b border-gray-200 mb-3">
               {["description", "ingredients", "how_to_use"].map((tab) => (
                 <button
                   key={tab}
-                  className={`pb-2 px-4 text-sm font-medium ${
+                  className={`pb-2 px-4 text-sm font-medium whitespace-nowrap ${
                     activeTab === tab
                       ? "text-teal-600 border-b-2 border-teal-100"
                       : "text-gray-500 hover:text-gray-700"
@@ -225,7 +229,7 @@ const ProductDetail = () => {
               ))}
             </div>
 
-            <div className="py-4 text-gray-600">
+            <div className="text-sm text-gray-600">
               {activeTab === "description" && <p>{product.description}</p>}
               {activeTab === "ingredients" && <p>{product.ingredients}</p>}
               {activeTab === "how_to_use" && <p>{product.how_to_use}</p>}

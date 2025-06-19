@@ -22,46 +22,50 @@ export default function HeroBanner() {
   }, [isHovered]);
 
   return (
-    <div className="relative w-full px-4 pt-4">
-      {/* Carousel Container */}
-      <div
-        className="relative w-full aspect-[16/9] sm:aspect-[16/7] md:aspect-[16/6] overflow-hidden rounded-xl shadow-md"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        {/* Image Slides */}
-        <div className="relative w-full h-full">
-          {images.map((image, index) => (
-            <div
-              key={index}
-              className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ${
-                index === currentIndex ? "opacity-100 z-10" : "opacity-0"
-              }`}
-            >
-              <img
-                src={image}
-                alt={`Slide ${index + 1}`}
-                className="w-full h-full object-cover object-center"
-                loading={index === 0 ? "eager" : "lazy"}
-              />
+    <div className="relative  px-4 pt-4 container mx-auto ">
+      <section className="px-4  md:px-8  lg:px-16  ">
+        <div className="max-w-7xl mx-auto mb-6">
+          {/* Carousel Container */}
+          <div
+            className="relative w-full aspect-[16/9] sm:aspect-[16/7] md:aspect-[16/6] overflow-hidden rounded-xl shadow-md"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
+            {/* Image Slides */}
+            <div className="relative w-full h-full">
+              {images.map((image, index) => (
+                <div
+                  key={index}
+                  className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ${
+                    index === currentIndex ? "opacity-100 z-10" : "opacity-0"
+                  }`}
+                >
+                  <img
+                    src={image}
+                    alt={`Slide ${index + 1}`}
+                    className="w-full h-full object-cover object-center"
+                    loading={index === 0 ? "eager" : "lazy"}
+                  />
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
 
-        {/* Navigation Dots */}
-        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-20">
-          {images.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentIndex(index)}
-              className={`h-[3px] w-5 rounded-full transition-all duration-300 ${
-                index === currentIndex ? "bg-white w-7" : "bg-white/40"
-              }`}
-              aria-label={`Go to slide ${index + 1}`}
-            />
-          ))}
+            {/* Navigation Dots */}
+            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-20">
+              {images.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentIndex(index)}
+                  className={`h-[3px] w-5 rounded-full transition-all duration-300 ${
+                    index === currentIndex ? "bg-white w-7" : "bg-white/40"
+                  }`}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
+              ))}
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 }
