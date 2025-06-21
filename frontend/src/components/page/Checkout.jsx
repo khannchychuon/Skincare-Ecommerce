@@ -114,8 +114,6 @@ const Checkout = () => {
 
   return (
     <div className="section-container">
-      <h1 className="text-3xl font-bold text-gray-900 mb-8">Checkout</h1>
-
       <div className="grid md:grid-cols-3 gap-8">
         {/* FORM */}
         <div className="md:col-span-2">
@@ -139,53 +137,56 @@ const Checkout = () => {
                       name="note"
                       value={formData.note}
                       onChange={handleChange}
+                      placeholder="ទីតាំង,ក្រុមហ៊ុនដឹកជញ្ញូន......"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-300"
                       required
                     />
                   </div>
 
-                  <div>
-                    <label
-                      htmlFor="address"
-                      className="block text-sm font-medium text-gray-700 mb-1"
-                    >
-                      Current Address
-                    </label>
-                    <select
-                      id="address"
-                      name="address"
-                      value={formData.address}
-                      onChange={handleChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-300"
-                      required
-                    >
-                      <option value="">-- Select Address --</option>
-                      <option value="Phnom Penh">Phnom Penh</option>
-                      <option value="Canada">Canada</option>
-                      <option value="United Kingdom">United Kingdom</option>
-                      <option value="Australia">Australia</option>
-                    </select>
-                  </div>
+                  <div className="w-full flex flex-col sm:flex-row gap-4">
+                    {/* Address Field */}
+                    <div className="flex-1">
+                      <label
+                        htmlFor="address"
+                        className="block text-sm font-medium text-gray-700 mb-1"
+                      >
+                        Current Address
+                      </label>
+                      <select
+                        id="address"
+                        name="address"
+                        value={formData.address}
+                        onChange={handleChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-300"
+                        required
+                      >
+                        <option value="">-- Select Address --</option>
+                        <option value="Phnom Penh">Phnom Penh</option>
+                        <option value="Province">Province</option>
+                      </select>
+                    </div>
 
-                  <div>
-                    <label
-                      htmlFor="paymentType"
-                      className="block text-sm font-medium text-gray-700 mb-1"
-                    >
-                      Payment Type
-                    </label>
-                    <select
-                      id="paymentType"
-                      name="paymentType"
-                      value={formData.paymentType}
-                      onChange={handleChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-300"
-                      required
-                    >
-                      <option value="">-- Select Payment --</option>
-                      <option value="cod">Cash on Delivery</option>
-                      <option value="qr">QR Code</option>
-                    </select>
+                    {/* Payment Type Field */}
+                    <div className="flex-1">
+                      <label
+                        htmlFor="paymentType"
+                        className="block text-sm font-medium text-gray-700 mb-1"
+                      >
+                        Payment Type
+                      </label>
+                      <select
+                        id="paymentType"
+                        name="paymentType"
+                        value={formData.paymentType}
+                        onChange={handleChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-300"
+                        required
+                      >
+                        <option value="">-- Select Payment --</option>
+                        <option value="cod">Cash on Delivery</option>
+                        <option value="qr">QR Code</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
               </div>

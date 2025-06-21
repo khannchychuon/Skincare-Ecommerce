@@ -55,6 +55,7 @@ function AppWrapper() {
           <Route path="/footer" element={<Footer />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+
           <Route
             path="/userprofile"
             element={
@@ -70,13 +71,11 @@ function AppWrapper() {
   );
 }
 
-// Define App function (DO NOT FORGET THIS)
+
 function App() {
   return (
     <CartProvider>
-      <Router>
-        <AppWrapper />
-      </Router>
+      <AppWrapper />
     </CartProvider>
   );
 }

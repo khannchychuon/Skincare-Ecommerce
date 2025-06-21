@@ -39,8 +39,6 @@ const Cart = () => {
 
   return (
     <div className="section-container">
-      <h1 className="text-3xl font-bold text-[#2f4f4f] mb-8">Your Cart</h1>
-
       <div className="grid md:grid-cols-3 gap-8">
         <div className="md:col-span-2">
           <div className="bg-white rounded-lg shadow-md overflow-hidden">

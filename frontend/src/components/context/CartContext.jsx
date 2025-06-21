@@ -30,6 +30,9 @@ export const CartProvider = ({ children }) => {
 
   const addToCart = (product) => {
     setCartItems((prevItems) => {
+      // Ensure quantity is a number and at least 1
+      const newQuantity = Math.max(1, Number(product.quantity) || 1);
+
       // Check if the product is already in the cart
       const existingItemIndex = prevItems.findIndex(
         (item) => item.id === product.id
@@ -40,12 +43,11 @@ export const CartProvider = ({ children }) => {
         const updatedItems = [...prevItems];
         updatedItems[existingItemIndex] = {
           ...updatedItems[existingItemIndex],
-          quantity:
-            updatedItems[existingItemIndex].quantity + (product.quantity || 1),
+          quantity: updatedItems[existingItemIndex].quantity + newQuantity,
         };
         return updatedItems;
       } else {
-        return [...prevItems, { ...product, quantity: product.quantity || 1 }];
+        return [...prevItems, { ...product, quantity: newQuantity }];
       }
     });
   };

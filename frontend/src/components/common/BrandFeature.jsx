@@ -33,7 +33,7 @@ const BrandFeature = () => {
       id: 5,
       name: "Round Lab",
       logo: "/images/brands/roundlab-logo.webp",
-      slug: "round-lab",
+      slug: "roundlab",
     },
     {
       id: 6,
@@ -44,9 +44,9 @@ const BrandFeature = () => {
   ];
 
   return (
-    <div className="section-container px-4 sm:px-6 lg:px-8 pb-6">
-      <div className="text-center mb-8">
-        <div className="flex items-center justify-center">
+    <section className="px-4 py-8 md:px-8 md:py-12 lg:px-16  bg-gray-50">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex items-center mb-6 justify-center">
           <div className="flex-grow border-t border-teal-500"></div>
           <h2 className="px-4 text-3xl font-bold text-[#2f4f4f] whitespace-nowrap">
             Brands
@@ -81,7 +81,7 @@ const BrandFeature = () => {
           </Link>
         ))}
       </div>
-    </div>
+    </section>
   );
 };
 
