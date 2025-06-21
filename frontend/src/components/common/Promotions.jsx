@@ -58,6 +58,7 @@ const Promotion = () => {
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-[#2f4f4f]">Promotion</h2>
       </div>
+
       {error ? (
         <div className="text-center text-red-500">{error}</div>
       ) : products.length === 0 ? (

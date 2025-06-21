@@ -47,7 +47,7 @@ const BestSellers = () => {
   if (loading) {
     return (
       <div className="text-center py-6">
-        <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-teal-500 border-r-transparent" />
+        <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-pink-500 border-r-transparent" />
         <p className="mt-2 text-gray-600">Loading best sellers...</p>
       </div>
     );
@@ -56,13 +56,7 @@ const BestSellers = () => {
   return (
     <div className="section-container px-4 sm:px-6 lg:px-8 pb-6">
       <div className="text-center mb-8">
-        <div className="flex items-center justify-center">
-          <div className="flex-grow border-t border-teal-500"></div>
-          <h2 className="px-4 text-3xl font-bold text-[#2f4f4f] whitespace-nowrap">
-            BestSellers
-          </h2>
-          <div className="flex-grow border-t border-teal-500"></div>
-        </div>
+        <h2 className="text-3xl font-bold text-[#2f4f4f]">Best Sellers</h2>
       </div>
 
       {error ? (
