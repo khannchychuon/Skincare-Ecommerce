@@ -5,7 +5,7 @@ import { useCart } from "../context/CartContext";
 
 const Checkout = () => {
   const { cartItems } = useCart();
-  const backendBaseUrl = "http://127.0.0.1:8000";
+  const backendBaseUrl = "http://192.168.0.105:8000";
 
   const [formData, setFormData] = useState({
     note: "",
@@ -21,7 +21,7 @@ const Checkout = () => {
     return total + item.price * item.quantity;
   }, 0);
 
-  const shipping = subtotal > 0 ? 5.99 : 0;
+  const shipping = subtotal > 0 ? 2.0 : 0;
   const total = subtotal + shipping;
 
   const getImageUrl = (imagePath) => {
@@ -196,7 +196,7 @@ const Checkout = () => {
             <div className="mt-8 md:hidden">
               <button
                 type="submit"
-                className="w-full btn-primary"
+                className="w-full btn-primary text-teal-400"
                 disabled={loading}
               >
                 {loading ? "Placing Order..." : "Place Order"}
@@ -257,7 +257,7 @@ const Checkout = () => {
               <button
                 type="submit"
                 form="checkout-form"
-                className="w-full btn-primary"
+                className="w-full btn-primary text-teal-600"
                 disabled={loading}
               >
                 {loading ? "Placing Order..." : "Place Order"}

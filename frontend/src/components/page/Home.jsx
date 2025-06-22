@@ -7,7 +7,7 @@ import BrandFeature from "../common/BrandFeature";
 
 const Home = () => {
   return (
-    <div>
+    <div className="bg-gray-50">
       <HeroBanner />
       <Promotions />
       <FeaturedProducts />

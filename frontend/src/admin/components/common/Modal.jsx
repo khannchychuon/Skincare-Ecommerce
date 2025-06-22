@@ -12,16 +12,16 @@ export default function Modal({ type, item, onClose, setRefreshTrigger }) {
 
     try {
       let method = "POST";
-      let url = "http://127.0.0.1:8000/api/admin/products";
+      let url = "http://192.168.0.105:8000//api/admin/products";
 
       if (type === "editProduct" && item?.id) {
         method = "PUT";
-        url = `http://127.0.0.1:8000/api/admin/products/${item.id}`;
+        url = `http://192.168.0.105:8000//api/admin/products/${item.id}`;
       }
 
       if (type === "deleteProduct" && item?.id) {
         method = "DELETE";
-        url = `http://127.0.0.1:8000/api/admin/products/${item.id}`;
+        url = `http://192.168.0.105:8000//api/admin/products/${item.id}`;
       }
 
       const res = await fetch(url, {

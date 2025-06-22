@@ -30,7 +30,7 @@ const Products = () => {
     const getProducts = async () => {
       setLoading(true);
       try {
-        let url = "http://127.0.0.1:8000/api/products";
+        let url = "http://192.168.0.105:8000/api/products";
         const queryParams = new URLSearchParams();
         if (categoryFilter && categoryFilter !== "All") {
           queryParams.append("category", categoryFilter);

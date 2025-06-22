@@ -6,12 +6,12 @@ import { useCart } from "../context/CartContext";
 const Cart = () => {
   const { cartItems, updateCartItemQuantity, removeFromCart } = useCart();
 
-  const backendBaseUrl = "http://127.0.0.1:8000";
+  const backendBaseUrl = "http://192.168.0.105:8000";
   const subtotal = cartItems.reduce((total, item) => {
     return total + item.price * item.quantity;
   }, 0);
 
-  const shipping = subtotal > 0 ? 5.99 : 0;
+  const shipping = subtotal > 0 ? 2.0 : 0;
   const total = subtotal + shipping;
   const getImageUrl = (imagePath) => {
     if (!imagePath) return "/images/placeholder-product.png";
@@ -143,7 +143,7 @@ const Cart = () => {
             </div>
             <Link
               to="/checkout"
-              className="w-full btn-primary mt-6 flex items-center justify-center"
+              className="w-full btn-primary text-teal-800 mt-6 flex items-center justify-center"
             >
               Proceed to Checkout
             </Link>

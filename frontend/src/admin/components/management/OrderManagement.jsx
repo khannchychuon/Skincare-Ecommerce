@@ -27,7 +27,7 @@ export default function OrderManagement({
       try {
         const token = localStorage.getItem("adminToken");
         const response = await axios.get(
-          "http://localhost:8000/api/admin/orders",
+          "http://192.168.0.105:8000/api/admin/orders",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -60,7 +60,7 @@ export default function OrderManagement({
     try {
       const token = localStorage.getItem("adminToken");
       await axios.put(
-        `http://localhost:8000/api/admin/orders/${orderId}/status`,
+        `http://192.168.0.105:8000/api/admin/orders/${orderId}/status`,
         { status: newStatus },
         {
           headers: { Authorization: `Bearer ${token}` },

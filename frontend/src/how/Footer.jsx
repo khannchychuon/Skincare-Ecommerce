@@ -17,15 +17,15 @@ export default function Footer() {
           <div>
             <div className="flex items-center mb-4">
               <Link to="/" className="flex items-center space-x-3 group">
-                <div className="relative">
-                  <div className="h-12 w-12 bg-gradient-to-br from-teal-400 via-teal-500 to-teal-600 rounded-full flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
-                    <Heart
-                      size={20}
-                      className="text-white"
-                      fill="currentColor"
+                <div className="relative group ">
+                  <div className="h-12 w-12 rounded-full  flex items-center justify-center  group-hover:shadow-xl transition-transform group-hover:scale-105 overflow-hidden">
+                    <img
+                      src="/images/ourlogon.jpg"
+                      alt="Logo"
+                      className="h-full w-full object-cover"
                     />
                   </div>
-                  <div className="absolute -top-1 -right-1 h-4 w-4 bg-yellow-400 rounded-full animate-pulse"></div>
+                  <span className="absolute -top-1 -right-1 h-4 w-4 bg-yellow-400 rounded-full animate-pulse"></span>
                 </div>
                 <div className="flex flex-col">
                   <div className="flex items-center">

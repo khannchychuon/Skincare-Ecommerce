@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FaTelegram, FaPhone, FaLock, FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
-const API_BASE = "http://127.0.0.1:8000/api";
+const API_BASE = "http://192.168.0.105:8000/api";
 
 export default function AuthForm() {
   const [mode, setMode] = useState("login"); // login | register | forgot | verify

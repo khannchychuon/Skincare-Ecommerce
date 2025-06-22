@@ -13,7 +13,7 @@ const Promotion = () => {
     const fetchPromotion = async () => {
       try {
         const response = await fetch(
-          "http://127.0.0.1:8000/api/products?type=Promotion",
+          "http://192.168.0.105:8000/api/products?type=Promotion",
           {
             method: "GET",
             headers: {

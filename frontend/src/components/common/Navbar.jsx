@@ -114,12 +114,17 @@ const Navbar = () => {
         </button>
 
         <Link to="/" className="flex items-center gap-3 group">
-          <div className="relative">
-            <div className="h-12 w-12 bg-teal-600 rounded-full flex items-center justify-center shadow-lg group-hover:shadow-xl transition-transform group-hover:scale-105">
-              <Heart size={20} className="text-white" fill="currentColor" />
+          <div className="relative group ">
+            <div className="h-12 w-12 rounded-full  flex items-center justify-center  group-hover:shadow-xl transition-transform group-hover:scale-105 overflow-hidden">
+              <img
+                src="/images/ourlogon.jpg"
+                alt="Logo"
+                className="h-full w-full object-cover"
+              />
             </div>
             <span className="absolute -top-1 -right-1 h-4 w-4 bg-yellow-400 rounded-full animate-pulse"></span>
           </div>
+
           <div className="text-xl font-bold text-gray-800">
             <span className="text-teal-600">Cosmetic</span> Store
             <p className="text-xs text-gray-500">Beauty & Elegance</p>

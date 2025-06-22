@@ -13,7 +13,7 @@ const FeatureProducts = () => {
     const fetchFeatureProducts = async () => {
       try {
         const response = await fetch(
-          "http://127.0.0.1:8000/api/products?type=Trending",
+          "http://192.168.0.105:8000/api/products?type=Trending",
           {
             method: "GET",
             headers: {

@@ -56,21 +56,13 @@ function AppWrapper() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
-          <Route
-            path="/userprofile"
-            element={
-              <RequireAuth>
-                <UserProfile />
-              </RequireAuth>
-            }
-          />
+          <Route path="/userprofile" element={<UserProfile />} />
         </Routes>
       </main>
       <Footer />
     </div>
   );
 }
-
 
 function App() {
   return (

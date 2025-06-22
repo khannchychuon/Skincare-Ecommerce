@@ -1,7 +1,7 @@
 "use client";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
-const backendBaseUrl = "http://127.0.0.1:8000";
+const backendBaseUrl = "http://192.168.0.105:8000";
 const ProductCard = ({ product, showDiscount = false }) => {
   const { addToCart } = useCart();
 
@@ -14,7 +14,7 @@ const ProductCard = ({ product, showDiscount = false }) => {
     return `${backendBaseUrl}/${imagePath}`;
   };
   return (
-    <div className="w-full border border-gray-200 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 bg-white transform hover:-translate-y-1 relative">
+    <div className="w-full border border-gray-200 rounded-sm overflow-hidden  hover:shadow-xl transition-all duration-300 bg-white transform hover:-translate-y-1 relative">
       {showDiscount && product.discountPrice && (
         <div className="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full z-10">
           {discountPercentage}% OFF
@@ -23,7 +23,7 @@ const ProductCard = ({ product, showDiscount = false }) => {
       <Link to={`/products/${product.id}`} className="block group">
         <div className="relative aspect-square overflow-hidden">
           <img
-            src={getImageUrl(product.image)} // <-- Use the helper here!
+            src={getImageUrl(product.image)}
             alt={product.name}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             onError={(e) => {

@@ -14,7 +14,7 @@ export function AuthProvider({ children }) {
     const token = localStorage.getItem("adminToken");
     if (token) {
       axios
-        .get("http://127.0.0.1:8000/api/admin/profile", {
+        .get("http://192.168.0.105:8000/api/admin/profile", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -37,7 +37,7 @@ export function AuthProvider({ children }) {
   const login = async (phone, password) => {
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/admin/login",
+        "http://192.168.0.105:8000/api/admin/login",
         {
           phone,
           password,

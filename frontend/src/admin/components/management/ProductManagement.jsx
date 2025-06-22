@@ -21,7 +21,7 @@ export default function ProductManagement({
     const token = localStorage.getItem("adminToken");
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/admin/products", {
+      const res = await fetch("http://192.168.0.105:8000/api/admin/products", {
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: "application/json",
@@ -48,12 +48,15 @@ export default function ProductManagement({
       const token = localStorage.getItem("adminToken");
 
       try {
-        const res = await fetch("http://127.0.0.1:8000/api/admin/products", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: "application/json",
-          },
-        });
+        const res = await fetch(
+          "http://192.168.0.105:8000/api/admin/products",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: "application/json",
+            },
+          }
+        );
 
         const data = await res.json();
 

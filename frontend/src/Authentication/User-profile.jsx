@@ -35,7 +35,7 @@ const UserProfile = () => {
 
     const fetchUserProfile = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/user", {
+        const response = await fetch("http://192.168.0.105:8000/api/user", {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -59,13 +59,16 @@ const UserProfile = () => {
 
     const fetchOrderHistory = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/user/orders", {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await fetch(
+          "http://192.168.0.105:8000/api/user/orders",
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -115,14 +118,17 @@ const UserProfile = () => {
     }
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/user/update", {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(editForm),
-      });
+      const response = await fetch(
+        "http://192.168.0.105:8000/api/user/update",
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(editForm),
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -174,7 +180,7 @@ const UserProfile = () => {
   const getImageUrl = (imagePath) => {
     if (!imagePath) return "/images/placeholder-product.png";
     if (imagePath.startsWith("http")) return imagePath;
-    return `http://127.0.0.1:8000/${imagePath}`;
+    return `http://192.168.0.105:8000/${imagePath}`;
   };
 
   if (loading) {

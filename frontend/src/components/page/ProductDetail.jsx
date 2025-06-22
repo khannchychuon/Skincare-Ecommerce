@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import { Star, Minus, Plus, ShoppingBag } from "lucide-react";
 import { useCart } from "../context/CartContext";
 
-const backendBaseUrl = "http://127.0.0.1:8000";
+const backendBaseUrl = "http://192.168.0.105:8000";
 
 const getImageUrl = (imagePath) => {
   if (!imagePath) return "/images/placeholder-product.png";

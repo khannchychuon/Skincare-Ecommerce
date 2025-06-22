@@ -29,9 +29,9 @@ export default function DashboardHome() {
         };
 
         const [ordersRes, usersRes, productsRes] = await Promise.all([
-          axios.get("http://127.0.0.1:8000/api/admin/orders", config),
-          axios.get("http://127.0.0.1:8000/api/admin/users", config),
-          axios.get("http://127.0.0.1:8000/api/admin/products", config),
+          axios.get("http://192.168.0.105:8000/api/admin/orders", config),
+          axios.get("http://192.168.0.105:8000/api/admin/users", config),
+          axios.get("http://192.168.0.105:8000/api/admin/products", config),
         ]);
 
         const products = productsRes.data;
